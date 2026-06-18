@@ -5,7 +5,7 @@
   /* Playful Theme Palette */
   --bg-gradient: linear-gradient(135deg, #fef9c3 0%, #dbeafe 50%, #fae8ff 100%);
   --text-primary: #1e293b;
-  --text-muted: #64748b;
+  --text-muted: #475569;
   
   --card-bg: rgba(255, 255, 255, 0.75);
   --card-border: rgba(255, 255, 255, 0.6);
@@ -20,26 +20,17 @@
   --color-error: #f87171;
   --color-star: #fbbf24;
   --color-accent: #fb7185;
-
-  font-family: var(--font-text);
-  font-size: 18px;
-  color: var(--text-primary);
-  background: var(--bg-gradient);
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+    --bg-gradient: linear-gradient(135deg, #090d16 0%, #0f0e26 50%, #1a0824 100%);
     --text-primary: #f8fafc;
-    --text-muted: #94a3b8;
+    --text-muted: #cbd5e1;
     
-    --card-bg: rgba(15, 23, 42, 0.65);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --card-border: rgba(255, 255, 255, 0.15);
+    --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
 
     --color-spelling: #a855f7;
     --color-spelling-hover: #c084fc;
@@ -48,11 +39,19 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
-  margin: 0;
+  font-family: var(--font-text);
+  font-size: 18px;
+  color: var(--text-primary);
   background: var(--bg-gradient);
   background-attachment: fixed;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
 }
@@ -65,7 +64,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 /* Glassmorphism Card Style */
@@ -78,6 +76,7 @@ body {
   box-shadow: var(--card-shadow);
   padding: 32px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  color: var(--text-primary);
 }
 
 /* Typography */
@@ -85,6 +84,7 @@ h1, h2, h3, h4 {
   font-family: var(--font-fun);
   font-weight: 700;
   margin-top: 0;
+  color: var(--text-primary);
 }
 
 h1 {
@@ -113,6 +113,7 @@ button {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
 }
 
 button:active {
