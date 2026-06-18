@@ -1,18 +1,2300 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kids Learning Quest - Spelling & Timetables Game</title>
-    <meta name="description" content="An interactive, gamified learning experience for spelling and times tables with sound, confetti, and rewards." />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Lexend:wght@300..800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explorer's Quest — Spelling & Math Adventure</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Lexend:wght@300..800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-space: #070b19;
+      --bg-map: #0d1527;
+      --panel-glass: rgba(22, 33, 62, 0.85);
+      --border-glow: rgba(251, 191, 36, 0.25);
+      --gold: #fbbf24;
+      --gold-dark: #d97706;
+      --green-success: #10b981;
+      --red-fail: #ef4444;
+      --text-light: #e8edf5;
+      --text-muted: #94a3b8;
+      --font-display: 'Fredoka', system-ui, sans-serif;
+      --font-body: 'Lexend', system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg-space);
+      color: var(--text-light);
+      font-family: var(--font-body);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Cosmic Grid Background overlay */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-space);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e2d4a;
+      border-radius: 5px;
+      border: 2px solid var(--bg-space);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-dark);
+    }
+
+    /* Screen Transitions */
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+      z-index: 10;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Utility UI Classes */
+    .glass-card {
+      background: var(--panel-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 2px solid var(--border-glow);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow-y: auto;
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .glass-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+      transform: skewX(-25deg);
+      pointer-events: none;
+      transition: 0.75s;
+    }
+    
+    .glass-card:hover::after {
+      left: 150%;
+      transition: 0.75s;
+    }
+
+    .title-display {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--gold);
+      text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      letter-spacing: -0.01em;
+    }
+
+    /* Glowing Buttons */
+    .btn-glow {
+      cursor: pointer;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 36px;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #0d1527;
+      background: linear-gradient(135deg, #ffe066 0%, #fbbf24 100%);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-glow:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(251, 191, 36, 0.6);
+      filter: brightness(1.05);
+    }
+
+    .btn-glow:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--text-light);
+      border: 2px solid rgba(148, 163, 184, 0.2);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(148, 163, 184, 0.4);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Header Nav Styling */
+    header {
+      width: 100%;
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      position: sticky;
+      top: 0;
+      background: rgba(7, 11, 25, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.4));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .logo h1 {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffe066, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .wallet-pill {
+      background: #111e38;
+      border: 1px solid var(--border-glow);
+      border-radius: 50px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .wallet-pill:hover {
+      background: #192b4f;
+      transform: scale(1.05);
+    }
+
+    .wallet-gem {
+      font-size: 1.35rem;
+      animation: pulseGlow 1.5s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { transform: scale(1); filter: drop-shadow(0 0 2px #3b82f6); }
+      to { transform: scale(1.15); filter: drop-shadow(0 0 8px #3b82f6); }
+    }
+
+    .wallet-count {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #3b82f6;
+    }
+
+    .wallet-robux {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--gold);
+      border-left: 1.5px solid #2d3b59;
+      padding-left: 8px;
+    }
+
+    .btn-parent {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.6rem;
+      padding: 6px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-parent:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--gold);
+    }
+
+    /* Screen 1: Welcome / Character Select */
+    .avatar-selection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    @media (max-width: 580px) {
+      .avatar-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .avatar-card {
+      background: rgba(30, 41, 59, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar-card:hover {
+      background: rgba(30, 41, 59, 0.7);
+      border-color: rgba(251, 191, 36, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .avatar-card.selected {
+      background: rgba(251, 191, 36, 0.1);
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.25);
+      transform: scale(1.05);
+    }
+
+    .avatar-emoji {
+      font-size: 3rem;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    }
+
+    .avatar-label {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .form-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .name-input {
+      width: 100%;
+      max-width: 320px;
+      padding: 14px 20px;
+      border-radius: 50px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.6);
+      color: white;
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .name-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+    }
+
+    /* Initiation Sequence Controls */
+    .initiation-box {
+      max-width: 760px;
+      margin: auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+    }
+
+    .initiation-steps {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .init-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .init-dot.active {
+      background: var(--gold);
+      transform: scale(1.25);
+      box-shadow: 0 0 8px var(--gold);
+    }
+
+    .init-dot.done {
+      background: var(--green-success);
+    }
+
+    /* Spelling / Speech Section */
+    .speech-box {
+      margin: 8px 0;
+      padding: 12px 18px;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .reading-paragraph {
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+      text-align: left;
+      margin-bottom: 8px;
+      color: #94a3b8;
+    }
+
+    .reading-word {
+      display: inline-block;
+      margin-right: 6px;
+      transition: color 0.2s, text-shadow 0.2s;
+      border-radius: 4px;
+      padding: 0 4px;
+    }
+
+    .reading-word.read {
+      color: var(--green-success);
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .reading-word.current {
+      color: var(--gold);
+      background: rgba(251, 191, 36, 0.15);
+      border-bottom: 2px dashed var(--gold);
+    }
+
+    .mic-indicator-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0;
+    }
+
+    .mic-button {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle, #f87171 0%, #ef4444 100%);
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+      position: relative;
+    }
+
+    .mic-button:hover {
+      transform: scale(1.05);
+      filter: brightness(1.05);
+    }
+
+    .mic-button.listening {
+      background: radial-gradient(circle, #34d399 0%, #10b981 100%);
+      box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+      animation: micPulse 1.5s infinite;
+    }
+
+    @keyframes micPulse {
+      0% { transform: scale(1); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
+      50% { transform: scale(1.08); box-shadow: 0 8px 35px rgba(16, 185, 129, 0.7); }
+      100% { transform: scale(1); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
+    }
+
+    /* Speech waves animation */
+    .speech-waves {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 24px;
+      margin-top: 12px;
+    }
+
+    .speech-waves.active {
+      display: flex;
+    }
+
+    .wave-bar {
+      width: 4px;
+      height: 6px;
+      background: var(--green-success);
+      border-radius: 4px;
+      animation: waveBounce 1s infinite ease-in-out;
+    }
+
+    .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.3s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.45s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.6s; }
+
+    @keyframes waveBounce {
+      0%, 100% { height: 6px; }
+      50% { height: 24px; }
+    }
+
+    /* Math Sprint Section */
+    .math-sprint-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .timer-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .timer-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+      transition: width 0.1s linear;
+    }
+
+    .math-problem {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 6px 12px rgba(0,0,0,0.4);
+      margin: 8px 0 12px;
+      letter-spacing: -0.01em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .math-problem span {
+      display: inline-block;
+      animation: numPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes numPop {
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .math-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .math-opt-btn {
+      background: rgba(30, 41, 59, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 10px;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .math-opt-btn:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: var(--gold);
+      transform: scale(1.03);
+    }
+
+    .math-opt-btn.correct {
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%) !important;
+      border-color: #34d399 !important;
+      color: white !important;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .math-opt-btn.wrong {
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+      border-color: #f87171 !important;
+      color: white !important;
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* Explorer Map Layout */
+    .map-wrapper {
+      width: 100%;
+      height: 360px;
+      background: radial-gradient(ellipse at center, #1b263b 0%, #0d1b2a 100%);
+      border: 3px solid var(--border-glow);
+      border-radius: 30px;
+      position: relative;
+      overflow-x: auto;
+      overflow-y: hidden;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.6);
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .map-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(251, 191, 36, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(251, 191, 36, 0.03) 1px, transparent 1px);
+      pointer-events: none;
+    }
+
+    /* Map Path styling */
+    .map-content-container {
+      position: relative;
+      height: 280px;
+      width: 1800px; /* Long scrolling width */
+      display: flex;
+      align-items: center;
+    }
+
+    .map-svg-path {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .map-node-container {
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .map-node {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 4px solid #1e293b;
+      background: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #94a3b8;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .map-node:hover {
+      transform: scale(1.1) translateY(-4px);
+    }
+
+    .map-node.active {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      border-color: #ffe066;
+      color: #0d1527;
+      animation: pulseActiveNode 1.5s infinite alternate;
+      box-shadow: 0 0 25px rgba(251, 191, 36, 0.5);
+    }
+
+    @keyframes pulseActiveNode {
+      from { transform: scale(1); box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+      to { transform: scale(1.08) translateY(-3px); box-shadow: 0 0 25px rgba(251, 191, 36, 0.7); }
+    }
+
+    .map-node.complete {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-color: #34d399;
+      color: white;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .map-node.locked {
+      background: #1e293b;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .map-node-label {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-light);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      white-space: nowrap;
+    }
+
+    /* Modal / Pop-ups Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInFast 0.25s forwards;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeInFast {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-card {
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--panel-glass);
+      border: 3px solid var(--border-glow);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      text-align: center;
+      position: relative;
+      animation: scaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes scaleUp {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.4rem;
+    }
+
+    .modal-close:hover {
+      color: white;
+    }
+
+    /* Chest Open Animation styles */
+    .chest-wrapper {
+      width: 160px;
+      height: 160px;
+      margin: 16px auto;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .chest {
+      width: 100%;
+      height: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: transform 0.2s;
+    }
+
+    .chest.shake {
+      animation: chestShake 0.6s ease-in-out infinite;
+    }
+
+    @keyframes chestShake {
+      0%, 100% { transform: rotate(0); }
+      15% { transform: rotate(-8deg) scale(1.05); }
+      30% { transform: rotate(6deg) scale(1.05); }
+      45% { transform: rotate(-4deg) scale(1.05); }
+      60% { transform: rotate(3deg) scale(1.05); }
+      75% { transform: rotate(-2deg) scale(1.05); }
+    }
+
+    /* Parent Dashboard Locking Gate */
+    .lock-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 280px;
+      margin: 20px auto;
+    }
+
+    .lock-btn {
+      background: #111e38;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .lock-btn:hover {
+      background: #1e2d4a;
+      border-color: var(--gold);
+    }
+
+    /* Parent Dashboard Layout */
+    .parent-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-top: 10px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    @media (max-width: 860px) {
+      .parent-grid {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+      }
+    }
+
+    .analytics-section, .queue-section {
+      background: rgba(13, 25, 47, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 20px;
+      overflow-y: auto;
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--gold);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 10px;
+    }
+
+    /* Progress Stats widgets */
+    .widget-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 580px) {
+      .widget-row { grid-template-columns: 1fr; }
+    }
+
+    .stat-widget {
+      background: #0b111e;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .widget-val {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--green-success);
+    }
+
+    .widget-val.warn {
+      color: var(--red-fail);
+    }
+
+    .widget-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Heatmap bar graph */
+    .bar-graph {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .graph-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .graph-label {
+      width: 110px;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      text-align: right;
+    }
+
+    .graph-track {
+      flex: 1;
+      height: 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .graph-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      border-radius: 8px;
+    }
+
+    .graph-fill.warning {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+    }
+
+    .graph-fill.danger {
+      background: linear-gradient(90deg, #ef4444, #f87171);
+    }
+
+    .graph-val {
+      width: 44px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Reward Queue cards */
+    .queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .queue-card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .queue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .queue-badge {
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .queue-badge.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .queue-badge.claimed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green-success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .queue-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .payout-input-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .payout-input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(15, 23, 42, 0.8);
+      color: white;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+    }
+
+    /* Confetti Canvas overlay */
+    .confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Confetti Layer -->
+  <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+  <!-- Navigation Header -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon">🧭</span>
+      <h1>Explorer's Quest</h1>
+    </div>
+    
+    <div class="header-controls">
+      <!-- Kid Wallet pill -->
+      <div id="header-wallet" class="wallet-pill" onclick="openWalletModal()" style="display: none;">
+        <span class="wallet-gem">💎</span>
+        <span id="gem-balance" class="wallet-count">0</span>
+        <span id="robux-balance" class="wallet-robux">R$ 0</span>
+      </div>
+
+      <!-- Parent Mode Toggle -->
+      <button class="btn-parent" onclick="openParentGate()" title="Parent Dashboard">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <!-- SCREEN 1: WELCOME & CREATE AVATAR -->
+  <div id="screen-welcome" class="screen active">
+    <div class="glass-card" style="max-width: 720px; margin: auto; width: 100%;">
+      <div class="avatar-selection">
+        <div>
+          <h2 class="title-display" style="font-size: 2.2rem; margin-bottom: 8px;">Create Your Explorer!</h2>
+          <p style="color: var(--text-muted);">Choose a character and enter your name to start the baseline initiation.</p>
+        </div>
+
+        <!-- Character Selection Grid -->
+        <div class="avatar-grid">
+          <div class="avatar-card selected" onclick="selectAvatar(this, '⚡', 'Harry')">
+            <span class="avatar-emoji">⚡</span>
+            <span class="avatar-label">Harry</span>
+          </div>
+          <div class="avatar-card" onclick="selectAvatar(this, '🧹', 'Ron')">
+            <span class="avatar-emoji">🧹</span>
+            <span class="avatar-label">Ron</span>
+          </div>
+          <div class="avatar-card" onclick="selectAvatar(this, '🧙‍♂️', 'Dumbledore')">
+            <span class="avatar-emoji">🧙‍♂️</span>
+            <span class="avatar-label">Dumbledore</span>
+          </div>
+          <div class="avatar-card" onclick="selectAvatar(this, '🧔', 'Hagrid')">
+            <span class="avatar-emoji">🧔</span>
+            <span class="avatar-label">Hagrid</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input type="text" id="explorer-name" class="name-input" placeholder="Explorer's Name..." value="Harry">
+          <button class="btn-glow" style="margin-top: 10px;" onclick="submitProfile()">
+            Begin Initiation ⚔️
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: INITIATION GATEWAY (DAY 0 SUMMARY) -->
+  <div id="screen-initiation-intro" class="screen">
+    <div class="glass-card initiation-box">
+      <h2 class="title-display" style="font-size: 2rem; margin-bottom: 8px;">The Explorer's Initiation</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 580px; margin: 0 auto 16px;">
+        Welcome <span id="intro-name-span" style="color: var(--gold); font-weight: 700;">Explorer</span>! Before the magical scrolling map opens, we must test your spelling fluency and math speed to calibrate your 30-day quest path!
+      </p>
+
+      <div style="background: rgba(15, 23, 42, 0.4); border-radius: 20px; padding: 16px; display: flex; gap: 16px; text-align: left; margin-bottom: 16px;">
+        <div style="flex: 1; border-right: 1px dashed rgba(255,255,255,0.1); padding-right: 20px;">
+          <h3 style="color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">📖 Part 1: Fluency Test</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Read a short sentence from Harry Potter out loud using the browser microphone. Highlights words as you speak!</p>
+        </div>
+        <div style="flex: 1; padding-left: 10px;">
+          <h3 style="color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">⚡ Part 2: Math Sprint</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Solve 5 basic multiplication questions as fast as possible. Get 100 Gems instantly on completion!</p>
+        </div>
+      </div>
+
+      <button class="btn-glow" onclick="startInitiationReading()">
+        Start Reading Test 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: INITIATION SPELLING/READING FLUID TEST -->
+  <div id="screen-initiation-reading" class="screen">
+    <div class="glass-card initiation-box">
+      <!-- Steps header indicators -->
+      <div class="initiation-steps">
+        <div class="init-dot active"></div>
+        <div class="init-dot"></div>
+      </div>
+
+      <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 4px;">Initiation: Phonics Fluency</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Read the sentence out loud. Microphones will light up green when matched!</p>
+
+      <div class="speech-box">
+        <!-- Interactive paragraph word markup -->
+        <div id="paragraph-container" class="reading-paragraph">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="mic-indicator-wrapper">
+          <button id="mic-trigger" class="mic-button" onclick="toggleSpeechListening()">
+            🎙️
+          </button>
+          
+          <div id="speech-wave-anim" class="speech-waves">
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+            <div class="wave-bar"></div>
+          </div>
+          
+          <div id="speech-info" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">
+            Click microphone to speak.
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulation manual overwrite helper for testing in blocked browser frames -->
+      <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px;">
+        <button class="btn-glow btn-secondary" style="padding: 10px 20px; font-size: 0.9rem;" onclick="simulateSpeechReading()">
+          🧪 Simulate Voice Read
+        </button>
+        <button id="reading-next-btn" class="btn-glow btn-success" style="padding: 10px 20px; font-size: 0.9rem; display: none;" onclick="finishReadingTest()">
+          Proceed to Math Sprint ▶
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: INITIATION MATH TIMED SPRINT -->
+  <div id="screen-initiation-math" class="screen">
+    <div class="glass-card initiation-box math-sprint-container">
+      <div class="initiation-steps">
+        <div class="init-dot done"></div>
+        <div class="init-dot active"></div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 class="title-display" style="font-size: 1.8rem; margin: 0;">Math Timed Sprint</h2>
+        <div style="font-family: var(--font-display); font-size: 1.25rem; background: rgba(0,0,0,0.3); padding: 4px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          Question: <span id="math-counter" style="color: var(--gold); font-weight: 700;">1/5</span>
+        </div>
+      </div>
+
+      <!-- Timer Indicator bar -->
+      <div class="timer-bar">
+        <div id="math-timer-fill" class="timer-fill"></div>
+      </div>
+
+      <div class="glass-card" style="background: rgba(15, 23, 42, 0.4); margin-bottom: 12px; border-color: rgba(255,255,255,0.05); padding: 16px;">
+        <div id="math-problem-box" class="math-problem">
+          <!-- Populated by JS: e.g. <span>5</span> <span>×</span> <span>4</span> -->
+        </div>
+      </div>
+
+      <div id="math-options-grid" class="math-options">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: KID'S SCROLLING QUEST TREASURE MAP -->
+  <div id="screen-map" class="screen">
+    <!-- Header of the map with helpful daily directives -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; width: 100%;">
+      <div>
+        <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 2px;">Treasure Island Quest</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Clear daily quest bubbles to guide your ship to the final treasure chest!</p>
+      </div>
+
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-glow" style="padding: 8px 16px; font-size: 0.85rem;" onclick="openTreasureVault()">
+          🔓 Claim Vault PIN
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrolling Map Viewport -->
+    <div class="map-wrapper" style="margin: auto 0;">
+      <div class="map-grid-overlay"></div>
+      
+      <div class="map-content-container">
+        <!-- SVG Connecting line drawing dots path between node bubbles -->
+        <svg class="map-svg-path">
+          <path id="map-curve-path" d="M 50 140 Q 220 30, 390 140 T 730 140 T 1070 140 T 1410 140 T 1750 140" fill="none" stroke="rgba(251, 191, 36, 0.25)" stroke-width="6" stroke-dasharray="12 12" />
+        </svg>
+
+        <!-- Node Day bubbles. Populated by script, styled dynamically -->
+        <!-- Day 0 (Start node) -->
+        <div class="map-node-container" style="left: 40px; top: 106px;">
+          <div class="map-node complete" onclick="openInitiationSummaryModal()">👑</div>
+          <span class="map-node-label">Initiation</span>
+        </div>
+
+        <!-- Day 1 (Next active day) -->
+        <div class="map-node-container" style="left: 210px; top: 56px;">
+          <div class="map-node active" onclick="playMockQuest(1)">1</div>
+          <span class="map-node-label">Lava Bridge</span>
+        </div>
+
+        <!-- Day 2 (Locked) -->
+        <div class="map-node-container" style="left: 380px; top: 106px;">
+          <div class="map-node locked" onclick="alertLockedDay(2)">2</div>
+          <span class="map-node-label">Deep Cave</span>
+        </div>
+
+        <!-- Day 3 (Locked) -->
+        <div class="map-node-container" style="left: 550px; top: 156px;">
+          <div class="map-node locked" onclick="alertLockedDay(3)">3</div>
+          <span class="map-node-label">Coral Reef</span>
+        </div>
+
+        <!-- Days 4 - 30 illustrative layout bubbles -->
+        <div class="map-node-container" style="left: 720px; top: 106px;">
+          <div class="map-node locked" onclick="alertLockedDay(4)">4</div>
+          <span class="map-node-label">Jungle Gate</span>
+        </div>
+
+        <div class="map-node-container" style="left: 890px; top: 56px;">
+          <div class="map-node locked" onclick="alertLockedDay(5)">5</div>
+          <span class="map-node-label">Volcano Pass</span>
+        </div>
+
+        <div class="map-node-container" style="left: 1060px; top: 106px;">
+          <div class="map-node locked" onclick="alertLockedDay(10)">10</div>
+          <span class="map-node-label">Skull Fortress</span>
+        </div>
+
+        <div class="map-node-container" style="left: 1230px; top: 156px;">
+          <div class="map-node locked" onclick="alertLockedDay(15)">15</div>
+          <span class="map-node-label">Lost Temple</span>
+        </div>
+
+        <div class="map-node-container" style="left: 1400px; top: 106px;">
+          <div class="map-node locked" onclick="alertLockedDay(20)">20</div>
+          <span class="map-node-label">Whispering Dunes</span>
+        </div>
+
+        <div class="map-node-container" style="left: 1570px; top: 96px;">
+          <div class="map-node locked" onclick="alertLockedDay(25)">25</div>
+          <span class="map-node-label">Frost Citadel</span>
+        </div>
+
+        <!-- Day 30 Final Chest -->
+        <div class="map-node-container" style="left: 1710px; top: 140px;">
+          <div class="map-node locked" style="border-radius: 16px; width: 80px; height: 80px; font-size: 2.2rem;" onclick="alertLockedDay(30)">🎁</div>
+          <span class="map-node-label">Final Treasure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: PARENT ANALYTICS & PAYOUT DASHBOARD -->
+  <div id="screen-parent" class="screen">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 12px; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <h2 class="title-display" style="font-size: 2.1rem; margin-bottom: 4px;">Parent Control Panel</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Review cognitive analytics and input digital Robux gift card PINs.</p>
+      </div>
+
+      <button class="btn-glow btn-secondary" style="padding: 10px 24px; font-size: 0.9rem;" onclick="exitParentMode()">
+        ◀ Back to Kid Map
+      </button>
+    </div>
+
+    <!-- Main parent interface split grid -->
+    <div class="parent-grid">
+      <!-- Left side: Analytics graphs -->
+      <div class="analytics-section">
+        <h3 class="dashboard-title">📊 Baseline Initiation Metrics</h3>
+        
+        <!-- Quick stats cards -->
+        <div class="widget-row">
+          <div class="stat-widget">
+            <div id="parent-reading-metric" class="widget-val">90%</div>
+            <div class="widget-label">Reading Accuracy</div>
+          </div>
+          <div class="stat-widget">
+            <div id="parent-math-metric" class="widget-val">80%</div>
+            <div class="widget-label">Math Accuracy</div>
+          </div>
+          <div class="stat-widget">
+            <div id="parent-speed-metric" class="widget-val">2.8s</div>
+            <div class="widget-label">Avg Math Speed</div>
+          </div>
+        </div>
+
+        <!-- Heatmap Phonics breakdown widget -->
+        <div style="margin-top: 24px;">
+          <h4 style="color: var(--gold); margin-bottom: 12px; font-family: var(--font-display); font-size: 1.1rem;">Phonic / Reading Fluency Diagnostics</h4>
+          <div class="bar-graph">
+            <div class="graph-item">
+              <span class="graph-label">Sight Words</span>
+              <div class="graph-track">
+                <div class="graph-fill" style="width: 95%;"></div>
+              </div>
+              <span class="graph-val">95%</span>
+            </div>
+            <div class="graph-item">
+              <span class="graph-label">Digraphs (th, sh)</span>
+              <div class="graph-track">
+                <div class="graph-fill" style="width: 80%;"></div>
+              </div>
+              <span class="graph-val">80%</span>
+            </div>
+            <div class="graph-item">
+              <span class="graph-label">Silent "e" Rule</span>
+              <div class="graph-track">
+                <div class="graph-fill warning" style="width: 60%;"></div>
+              </div>
+              <span class="graph-val">60%</span>
+            </div>
+            <div class="graph-item">
+              <span class="graph-label">Multisyllabic</span>
+              <div class="graph-track">
+                <div class="graph-fill danger" style="width: 45%;"></div>
+              </div>
+              <span class="graph-val">45%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Math table heatmap block -->
+        <div style="margin-top: 32px;">
+          <h4 style="color: var(--gold); margin-bottom: 12px; font-family: var(--font-display); font-size: 1.1rem;">Times Tables Mastery Bottlenecks</h4>
+          <div class="bar-graph">
+            <div class="graph-item">
+              <span class="graph-label">2s, 5s &amp; 10s</span>
+              <div class="graph-track">
+                <div class="graph-fill" style="width: 90%;"></div>
+              </div>
+              <span class="graph-val">0.8s</span>
+            </div>
+            <div class="graph-item">
+              <span class="graph-label">3s &amp; 4s</span>
+              <div class="graph-track">
+                <div class="graph-fill warning" style="width: 65%;"></div>
+              </div>
+              <span class="graph-val">2.1s</span>
+            </div>
+            <div class="graph-item">
+              <span class="graph-label">6s, 7s &amp; 8s</span>
+              <div class="graph-track">
+                <div class="graph-fill danger" style="width: 30%;"></div>
+              </div>
+              <span class="graph-val">4.5s</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: Robux Payout Queue dashboard widget -->
+      <div class="queue-section">
+        <h3 class="dashboard-title">🪙 Robux Reward Payout Queue</h3>
+        
+        <div id="reward-queue-container" class="queue-list">
+          <!-- Sourced by script, displays pending claims -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- MODALS & POPUPS SYSTEM                     -->
+  <!-- ========================================== -->
+
+  <!-- Modal 1: Kid Wallet/Robux Claims -->
+  <div id="modal-wallet" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('modal-wallet')">✖</button>
+      <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 14px;">Robux Payout Vault</h2>
+      
+      <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px;">
+        <div style="font-size: 2.4rem; font-weight: 700; color: var(--gold); font-family: var(--font-display); margin-bottom: 8px;" id="wallet-gems-modal">
+          0 Gems
+        </div>
+        <div style="font-size: 0.95rem; color: var(--text-muted);">
+          Gems exchange rate: <strong>100 Gems = 100 Robux</strong>
+        </div>
+      </div>
+
+      <div style="text-align: left; font-size: 0.9rem; line-height: 1.6; margin-bottom: 24px; color: var(--text-muted);">
+        <p style="margin-bottom: 8px;"><strong>How to claim Robux:</strong></p>
+        <ol style="margin-left: 20px;">
+          <li>Reach at least 100 Gems.</li>
+          <li>Click "Send Claim to Parent".</li>
+          <li>Your parent inputs the Robux code.</li>
+          <li>Unlock the chest to get your Robux PIN!</li>
+        </ol>
+      </div>
+
+      <button id="btn-wallet-claim" class="btn-glow" style="width: 100%;" onclick="submitRobuxClaim()">
+        Send Claim to Parent 🪙
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 2: Parent Lock Gate verification -->
+  <div id="modal-parent-gate" class="modal-overlay">
+    <div class="modal-card" style="max-width: 360px;">
+      <button class="modal-close" onclick="closeModal('modal-parent-gate')">✖</button>
+      <h2 class="title-display" style="font-size: 1.5rem; margin-bottom: 6px;">Parents Only</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">Please solve this equation to unlock:</p>
+      
+      <div style="font-family: var(--font-display); font-size: 2.2rem; color: white; margin-bottom: 16px;" id="parent-equation">
+        8 × 7 = ?
+      </div>
+
+      <div class="lock-grid">
+        <button class="lock-btn" onclick="pressGateKey(1)">1</button>
+        <button class="lock-btn" onclick="pressGateKey(2)">2</button>
+        <button class="lock-btn" onclick="pressGateKey(3)">3</button>
+        <button class="lock-btn" onclick="pressGateKey(4)">4</button>
+        <button class="lock-btn" onclick="pressGateKey(5)">5</button>
+        <button class="lock-btn" onclick="pressGateKey(6)">6</button>
+        <button class="lock-btn" onclick="pressGateKey(7)">7</button>
+        <button class="lock-btn" onclick="pressGateKey(8)">8</button>
+        <button class="lock-btn" onclick="pressGateKey(9)">9</button>
+        <button class="lock-btn" style="grid-column: span 2" onclick="pressGateKey(0)">0</button>
+        <button class="lock-btn" onclick="clearGateKey()">⌫</button>
+      </div>
+      
+      <div style="font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-top: 10px;" id="gate-typed-value">
+        &nbsp;
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Treasure Chest reveal PIN -->
+  <div id="modal-chest" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('modal-chest')">✖</button>
+      <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 6px;">Claim Your Robux Reward!</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Your parent sent a Robux Gift Card. Tap to open the chest!</p>
+
+      <div class="chest-wrapper" onclick="triggerChestOpening()">
+        <div id="treasure-chest-gfx" class="chest shake" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2220%22 y=%2245%22 width=%2260%22 height=%2240%22 rx=%226%22 fill=%22%23b45309%22 stroke=%22%2378350f%22 stroke-width=%224%22/><path d=%22M 20 45 Q 50 15, 80 45 Z%22 fill=%22%23d97706%22 stroke=%22%2378350f%22 stroke-width=%224%22/><rect x=%2244%22 y=%2240%22 width=%2212%22 height=%2216%22 rx=%222%22 fill=%22%23fbbf24%22 stroke=%22%23d97706%22 stroke-width=%222%22/><circle cx=%2250%22 cy=%2248%22 r=%223%22 fill=%22%2378350f%22/></svg>');"></div>
+      </div>
+
+      <div id="chest-reveal-card" style="display: none; background: #0f172a; padding: 24px; border-radius: 20px; border: 2px solid var(--gold); margin-top: 20px; animation: scaleUp 0.3s forwards;">
+        <span style="font-size: 1rem; color: var(--text-muted); display: block; margin-bottom: 6px;">YOUR ROBUX GIFT CARD PIN:</span>
+        <div id="revealed-pin-display" style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--gold); letter-spacing: 0.08em; text-shadow: 0 0 10px rgba(251,191,36,0.3); background: rgba(0,0,0,0.4); padding: 12px; border-radius: 12px; border: 1.5px dashed var(--gold);">
+          PIN-XXXX-XXXX
+        </div>
+        <p style="font-size: 0.85rem; color: var(--green-success); margin-top: 10px; font-weight: 600;">✨ Copy this code and redeem it on roblox.com/redeem!</p>
+      </div>
+
+      <div id="chest-instruction" style="font-size: 0.95rem; font-weight: 600; color: var(--gold); margin-top: 10px;">
+        Tap the chest to unlock the treasure!
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Initiation Success Day 0 complete -->
+  <div id="modal-initiation-success" class="modal-overlay">
+    <div class="modal-card">
+      <h2 class="title-display" style="font-size: 2rem; margin-bottom: 12px; color: var(--green-success);">Initiation Complete! 🎉</h2>
+      <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 24px;">
+        Congratulations, <strong style="color: white;" id="success-explorer-name">Explorer</strong>! You cleared the Phonic & Math speed baseline test. You earned your first in-game gems!
+      </p>
+
+      <div style="background: rgba(15, 23, 42, 0.4); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,200,87,0.1); display: flex; justify-content: space-around; margin-bottom: 24px;">
+        <div>
+          <span style="font-size: 2.2rem; display: block;">💎</span>
+          <span style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #3b82f6;">100 Gems</span>
+        </div>
+        <div style="border-right: 1.5px solid rgba(255,255,255,0.05);"></div>
+        <div>
+          <span style="font-size: 2.2rem; display: block;">🪙</span>
+          <span style="font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--gold);">100 Robux</span>
+        </div>
+      </div>
+
+      <button class="btn-glow" style="width: 100%;" onclick="dismissInitiationSuccess()">
+        Unlock Quest Map 🗺️
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 5: Day 0 Initiation Summary Card -->
+  <div id="modal-initiation-summary" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('modal-initiation-summary')">✖</button>
+      <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 6px;">Initiation Summary</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Explorer Initiation results calibrated on Day 0:</p>
+
+      <div style="background: rgba(15, 23, 42, 0.5); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px; text-align: left; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+          <span style="font-weight: 600; color: var(--text-light);">🔊 Reading Accuracy:</span>
+          <span id="sum-reading" style="font-family: var(--font-display); font-size: 1.25rem; color: var(--green-success); font-weight: 700;">90%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+          <span style="font-weight: 600; color: var(--text-light);">🧮 Math Accuracy:</span>
+          <span id="sum-math" style="font-family: var(--font-display); font-size: 1.25rem; color: var(--green-success); font-weight: 700;">80%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 600; color: var(--text-light);">⚡ Math Average Speed:</span>
+          <span id="sum-speed" style="font-family: var(--font-display); font-size: 1.25rem; color: var(--gold); font-weight: 700;">2.8s</span>
+        </div>
+      </div>
+
+      <button class="btn-glow btn-secondary" style="width: 100%;" onclick="closeModal('modal-initiation-summary')">
+        Close Explorer Log
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT APP LOGIC                       -->
+  <!-- ========================================== -->
+  <script>
+    // Audio Synthesis context wrapper using Web Audio API
+    const playAudioSynth = (type) => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        
+        if (type === 'correct') {
+          // Double beep cheerful arpeggio sound
+          const osc1 = ctx.createOscillator();
+          const gain1 = ctx.createGain();
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+          osc1.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+          gain1.gain.setValueAtTime(0.06, ctx.currentTime);
+          gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+          osc1.connect(gain1);
+          gain1.connect(ctx.destination);
+          osc1.start();
+          osc1.stop(ctx.currentTime + 0.3);
+        } else if (type === 'wrong') {
+          // Torch flickers / stumbling low buzz sound
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(120, ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(80, ctx.currentTime + 0.25);
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.25);
+        } else if (type === 'success') {
+          // Major arpeggio reward chord arpeggio
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime + (i * 0.08));
+            gain.gain.setValueAtTime(0.05, ctx.currentTime + (i * 0.08));
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.08) + 0.4);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime + (i * 0.08));
+            osc.stop(ctx.currentTime + (i * 0.08) + 0.4);
+          });
+        } else if (type === 'chest') {
+          // Epic swell arpeggio sweep + noise crackle
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(220, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(1320, ctx.currentTime + 0.8);
+          gain.gain.setValueAtTime(0.02, ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.4);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.85);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.85);
+        }
+      } catch (err) {
+        console.warn('Audio blocked or not supported on this browser context', err);
+      }
+    };
+
+    // Global application state
+    const appState = {
+      profile: {
+        name: 'Harry',
+        avatar: '⚡',
+        gems: 0,
+        robux: 0,
+        unlockedDay: 0 // 0 means Day 0 initiation not complete yet
+      },
+      currentGateCode: 56, // Equation result placeholder (8 x 7)
+      enteredGateCode: '',
+      rewardQueue: [
+        { id: 101, name: 'Ron', gems: 100, robux: 100, status: 'pending', pin: '' }
+      ],
+      initiation: {
+        readingWords: [
+          "Harry", "had", "a", "thin", "face,", "knobby", "knees,", 
+          "black", "hair,", "and", "bright", "green", "eyes."
+        ],
+        currentReadIdx: 0,
+        mathQuestions: [
+          { num1: 2, num2: 3, ans: 6, opts: [4, 6, 8, 12] },
+          { num1: 5, num2: 4, ans: 20, opts: [15, 20, 24, 25] },
+          { num1: 10, num2: 2, ans: 20, opts: [12, 18, 20, 22] },
+          { num1: 3, num2: 5, ans: 15, opts: [12, 15, 18, 21] },
+          { num1: 4, num2: 6, ans: 24, opts: [20, 24, 28, 30] }
+        ],
+        mathIndex: 0,
+        mathScores: [], // timings / accuracy
+        mathTimer: 15,
+        mathTimerInterval: null,
+        mathStartTime: null
+      }
+    };
+
+    // Selection Profile avatar
+    const selectAvatar = (element, emoji, name) => {
+      document.querySelectorAll('.avatar-card').forEach(c => c.classList.remove('selected'));
+      element.classList.add('selected');
+      appState.profile.avatar = emoji;
+      document.getElementById('explorer-name').value = name;
+    };
+
+    // Submitting profile names to database/memory
+    const submitProfile = () => {
+      const name = document.getElementById('explorer-name').value.trim() || 'Jack';
+      appState.profile.name = name;
+      document.getElementById('intro-name-span').textContent = name;
+      document.getElementById('success-explorer-name').textContent = name;
+      
+      // Navigate to Summary Screen Day 0 introduction
+      navigate('screen-initiation-intro');
+    };
+
+    // Universal navigator between screens
+    const navigate = (screenId) => {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+      }
+      
+      // Render wallet header pill only if user completes Day 0 or is on the map
+      const wallet = document.getElementById('header-wallet');
+      if (screenId === 'screen-map' || appState.profile.unlockedDay > 0) {
+        wallet.style.display = 'flex';
+      } else {
+        wallet.style.display = 'none';
+      }
+    };
+
+    // ==========================================
+    // PART 1: PHONICS FLUENCY MICROPHONE READING
+    // ==========================================
+    let isSpeechListening = false;
+    let speechRecognitionObj = null;
+
+    const startInitiationReading = () => {
+      navigate('screen-initiation-reading');
+      setupReadingUI();
+    };
+
+    const setupReadingUI = () => {
+      const container = document.getElementById('paragraph-container');
+      container.innerHTML = '';
+      appState.initiation.currentReadIdx = 0;
+
+      appState.initiation.readingWords.forEach((word, idx) => {
+        const span = document.createElement('span');
+        span.className = 'reading-word';
+        span.id = `read-w-${idx}`;
+        span.textContent = word;
+        container.appendChild(span);
+      });
+
+      // Highlight the first word
+      updateReadingHighlights();
+    };
+
+    const updateReadingHighlights = () => {
+      const idx = appState.initiation.currentReadIdx;
+      appState.initiation.readingWords.forEach((_, i) => {
+        const el = document.getElementById(`read-w-${i}`);
+        if (el) {
+          el.className = 'reading-word';
+          if (i < idx) {
+            el.classList.add('read');
+          } else if (i === idx) {
+            el.classList.add('current');
+          }
+        }
+      });
+    };
+
+    // Speech recognition object creation & hooks
+    const toggleSpeechListening = () => {
+      const trigger = document.getElementById('mic-trigger');
+      const wave = document.getElementById('speech-wave-anim');
+      const info = document.getElementById('speech-info');
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        info.innerHTML = "❌ Browser Speech Recognition not supported in this frame.<br>Click 'Simulate Voice Read' below!";
+        return;
+      }
+
+      if (isSpeechListening) {
+        // Stop listening
+        isSpeechListening = false;
+        trigger.classList.remove('listening');
+        wave.classList.remove('active');
+        info.textContent = 'Speech Stopped. Click mic to try again.';
+        if (speechRecognitionObj) speechRecognitionObj.stop();
+      } else {
+        // Start listening
+        isSpeechListening = true;
+        trigger.classList.add('listening');
+        wave.classList.add('active');
+        info.textContent = 'Listening to reading... Speak clearly!';
+        
+        try {
+          speechRecognitionObj = new SpeechRecognition();
+          speechRecognitionObj.continuous = true;
+          speechRecognitionObj.interimResults = true;
+          speechRecognitionObj.lang = 'en-US';
+
+          speechRecognitionObj.onresult = (event) => {
+            const results = event.results;
+            const latestResultIdx = event.resultIndex;
+            const transcript = results[latestResultIdx][0].transcript.trim().toLowerCase();
+            
+            processSpokenText(transcript);
+          };
+
+          speechRecognitionObj.onerror = (err) => {
+            console.error('Speech recognition error', err);
+            info.innerHTML = "⚠️ Mic Access Error/Blocked.<br>Please use the 'Simulate Voice Read' fallback.";
+          };
+
+          speechRecognitionObj.start();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+
+    const processSpokenText = (transcript) => {
+      const idx = appState.initiation.currentReadIdx;
+      const targetWord = appState.initiation.readingWords[idx]
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+        .toLowerCase();
+
+      // Check if spoken phrase contains target word
+      if (transcript.includes(targetWord)) {
+        playAudioSynth('correct');
+        appState.initiation.currentReadIdx++;
+        
+        if (appState.initiation.currentReadIdx >= appState.initiation.readingWords.length) {
+          // Finished reading!
+          isSpeechListening = false;
+          document.getElementById('mic-trigger').classList.remove('listening');
+          document.getElementById('speech-wave-anim').classList.remove('active');
+          document.getElementById('speech-info').textContent = '✅ Read complete! Proceed to Math.';
+          document.getElementById('reading-next-btn').style.display = 'inline-flex';
+          playAudioSynth('success');
+          if (speechRecognitionObj) speechRecognitionObj.stop();
+        }
+        
+        updateReadingHighlights();
+      }
+    };
+
+    // Manual simulation fallback if WebSpeech fails, blocks, or lacks permissions
+    const simulateSpeechReading = () => {
+      let delay = 350;
+      appState.initiation.currentReadIdx = 0;
+      document.getElementById('speech-wave-anim').classList.add('active');
+      document.getElementById('speech-info').textContent = '🔊 Simulating explorer reading...';
+
+      const simulateNextWord = () => {
+        if (appState.initiation.currentReadIdx < appState.initiation.readingWords.length) {
+          playAudioSynth('correct');
+          appState.initiation.currentReadIdx++;
+          updateReadingHighlights();
+          setTimeout(simulateNextWord, delay);
+        } else {
+          document.getElementById('speech-wave-anim').classList.remove('active');
+          document.getElementById('speech-info').textContent = '✅ Read complete! Proceed to Math.';
+          document.getElementById('reading-next-btn').style.display = 'inline-flex';
+          playAudioSynth('success');
+        }
+      };
+
+      setTimeout(simulateNextWord, 400);
+    };
+
+    const finishReadingTest = () => {
+      navigate('screen-initiation-math');
+      startMathSprint();
+    };
+
+    // ==========================================
+    // PART 2: MATH timed SPRINT
+    // ==========================================
+    const startMathSprint = () => {
+      appState.initiation.mathIndex = 0;
+      appState.initiation.mathScores = [];
+      loadMathQuestion();
+    };
+
+    const loadMathQuestion = () => {
+      const idx = appState.initiation.mathIndex;
+      const data = appState.initiation.mathQuestions[idx];
+      
+      document.getElementById('math-counter').textContent = `${idx + 1}/5`;
+      
+      // Render Equation elements
+      const box = document.getElementById('math-problem-box');
+      box.innerHTML = `
+        <span>${data.num1}</span>
+        <span style="color: var(--gold)">×</span>
+        <span>${data.num2}</span>
+        <span style="color: var(--gold)">=</span>
+        <span style="color: var(--gold); border-bottom: 4px solid var(--gold); width: 60px; min-height: 70px; display: inline-block;"></span>
+      `;
+
+      // Render Options buttons
+      const grid = document.getElementById('math-options-grid');
+      grid.innerHTML = '';
+      data.opts.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'math-opt-btn';
+        btn.textContent = option;
+        btn.onclick = () => chooseMathAnswer(option, btn);
+        grid.appendChild(btn);
+      });
+
+      // Restart Timer parameters (15 seconds total)
+      clearInterval(appState.initiation.mathTimerInterval);
+      appState.initiation.mathTimer = 15;
+      appState.initiation.mathStartTime = Date.now();
+      
+      const timerFill = document.getElementById('math-timer-fill');
+      timerFill.style.width = '100%';
+
+      appState.initiation.mathTimerInterval = setInterval(() => {
+        appState.initiation.mathTimer -= 0.1;
+        const pct = (appState.initiation.mathTimer / 15) * 100;
+        timerFill.style.width = `${pct}%`;
+
+        if (appState.initiation.mathTimer <= 0) {
+          clearInterval(appState.initiation.mathTimerInterval);
+          // Time ran out! Torch flicker sound, select correct as default penalty
+          playAudioSynth('wrong');
+          // Highlight correct answer and advance
+          highlightCorrectOptionAndNext();
+        }
+      }, 100);
+    };
+
+    const chooseMathAnswer = (val, clickedBtn) => {
+      clearInterval(appState.initiation.mathTimerInterval);
+      
+      const idx = appState.initiation.mathIndex;
+      const data = appState.initiation.mathQuestions[idx];
+      const correctAns = data.ans;
+      const duration = (Date.now() - appState.initiation.mathStartTime) / 1000;
+
+      // Lock buttons
+      document.querySelectorAll('.math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+
+      if (val === correctAns) {
+        clickedBtn.classList.add('correct');
+        playAudioSynth('correct');
+        appState.initiation.mathScores.push({ correct: true, speed: duration });
+      } else {
+        clickedBtn.classList.add('wrong');
+        playAudioSynth('wrong');
+        appState.initiation.mathScores.push({ correct: false, speed: duration });
+        
+        // Highlight correct button as helper hint
+        document.querySelectorAll('.math-opt-btn').forEach(btn => {
+          if (parseInt(btn.textContent) === correctAns) {
+            btn.classList.add('correct');
+          }
+        });
+      }
+
+      // Advance question index
+      setTimeout(() => {
+        appState.initiation.mathIndex++;
+        if (appState.initiation.mathIndex < 5) {
+          loadMathQuestion();
+        } else {
+          // Finished initiation math sprint!
+          triggerInitiationCompletion();
+        }
+      }, 1500);
+    };
+
+    const highlightCorrectOptionAndNext = () => {
+      document.querySelectorAll('.math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+      const idx = appState.initiation.mathIndex;
+      const data = appState.initiation.mathQuestions[idx];
+      
+      appState.initiation.mathScores.push({ correct: false, speed: 15 });
+
+      document.querySelectorAll('.math-opt-btn').forEach(btn => {
+        if (parseInt(btn.textContent) === data.ans) {
+          btn.classList.add('correct');
+        }
+      });
+
+      setTimeout(() => {
+        appState.initiation.mathIndex++;
+        if (appState.initiation.mathIndex < 5) {
+          loadMathQuestion();
+        } else {
+          triggerInitiationCompletion();
+        }
+      }, 1500);
+    };
+
+    const triggerInitiationCompletion = () => {
+      // Process metrics for dashboard
+      const scores = appState.initiation.mathScores;
+      const totalCorrect = scores.filter(s => s.correct).length;
+      const avgSpeed = scores.reduce((sum, s) => sum + s.speed, 0) / 5;
+
+      const mathAccuracy = Math.round((totalCorrect / 5) * 100);
+      const mathAvgSpeed = avgSpeed.toFixed(1);
+
+      // Save baseline calculations inside profile stats
+      appState.profile.gems = 100;
+      appState.profile.robux = 100;
+      appState.profile.unlockedDay = 1;
+
+      // Reflect profile in DOM UI Elements
+      document.getElementById('gem-balance').textContent = appState.profile.gems;
+      document.getElementById('robux-balance').textContent = `R$ ${appState.profile.robux}`;
+      document.getElementById('wallet-gems-modal').textContent = `${appState.profile.gems} Gems`;
+
+      // Update analytics stats
+      document.getElementById('parent-math-metric').textContent = `${mathAccuracy}%`;
+      document.getElementById('parent-speed-metric').textContent = `${mathAvgSpeed}s`;
+      document.getElementById('sum-math').textContent = `${mathAccuracy}%`;
+      document.getElementById('sum-speed').textContent = `${mathAvgSpeed}s`;
+
+      // Trigger triumphant animations
+      triggerConfetti();
+      playAudioSynth('success');
+
+      // Open completion wizard modal
+      document.getElementById('modal-initiation-success').classList.add('active');
+    };
+
+    const dismissInitiationSuccess = () => {
+      document.getElementById('modal-initiation-success').classList.remove('active');
+      navigate('screen-map');
+    };
+
+    // ==========================================
+    // REWARDS SYSTEM, CHEST REVEALS & WALLET
+    // ==========================================
+    const openWalletModal = () => {
+      document.getElementById('modal-wallet').classList.add('active');
+    };
+
+    const submitRobuxClaim = () => {
+      if (appState.profile.gems < 100) {
+        alert("⚠️ You need at least 100 Gems to claim a Robux code!");
+        return;
+      }
+
+      // Add to payout queue in parent view
+      const claimId = Date.now();
+      appState.rewardQueue.push({
+        id: claimId,
+        name: appState.profile.name,
+        gems: appState.profile.gems,
+        robux: appState.profile.robux,
+        status: 'pending',
+        pin: ''
+      });
+
+      renderParentQueue();
+      closeModal('modal-wallet');
+      
+      // Deduct gems locally
+      appState.profile.gems = 0;
+      appState.profile.robux = 0;
+      document.getElementById('gem-balance').textContent = '0';
+      document.getElementById('robux-balance').textContent = 'R$ 0';
+      document.getElementById('wallet-gems-modal').textContent = '0 Gems';
+
+      alert("🪙 Claim sent to Parent dashboard! Ask your parent to add a code pin.");
+    };
+
+    const renderParentQueue = () => {
+      const container = document.getElementById('reward-queue-container');
+      container.innerHTML = '';
+
+      if (appState.rewardQueue.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:12px; color:var(--text-muted);">No pending requests.</div>';
+        return;
+      }
+
+      appState.rewardQueue.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'queue-card';
+
+        if (item.status === 'pending') {
+          card.innerHTML = `
+            <div class="queue-header">
+              <strong style="color:white">${item.name}</strong>
+              <span class="queue-badge pending">Pending</span>
+            </div>
+            <div class="queue-body">
+              Requested: <strong>R$ ${item.robux}</strong> (${item.gems} Gems)
+              <div class="payout-input-group">
+                <input id="pin-input-${item.id}" type="text" class="payout-input" placeholder="Enter Robux PIN...">
+                <button class="btn-glow btn-success" style="padding: 6px 14px; font-size: 0.8rem;" onclick="parentPayClaim(${item.id})">Pay PIN</button>
+              </div>
+            </div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="queue-header">
+              <strong style="color:white">${item.name}</strong>
+              <span class="queue-badge claimed">Paid Out</span>
+            </div>
+            <div class="queue-body" style="font-size:0.8rem;">
+              Paid: <strong>R$ ${item.robux}</strong> | Code: <code>${item.pin}</code>
+            </div>
+          `;
+        }
+        container.appendChild(card);
+      });
+    };
+
+    const parentPayClaim = (claimId) => {
+      const input = document.getElementById(`pin-input-${claimId}`);
+      const pin = input.value.trim();
+
+      if (!pin) {
+        alert("⚠️ Please enter a valid gift card PIN!");
+        return;
+      }
+
+      const item = appState.rewardQueue.find(q => q.id === claimId);
+      if (item) {
+        item.status = 'claimed';
+        item.pin = pin;
+        
+        // Feed PIN to child's unlocked codes array
+        appState.profile.unlockedPin = pin;
+        
+        renderParentQueue();
+        alert("✨ Paid! Gift Card PIN registered. The kid can now open the Gold Treasure Chest to unlock it!");
+      }
+    };
+
+    // Vault reward modal triggers
+    const openTreasureVault = () => {
+      if (!appState.profile.unlockedPin) {
+        alert("🔐 Your vault is locked. Get 100 Gems, click Claim, and ask your parent to add a code!");
+        return;
+      }
+      
+      // Reset chest display states
+      document.getElementById('treasure-chest-gfx').className = 'chest shake';
+      document.getElementById('chest-reveal-card').style.display = 'none';
+      document.getElementById('chest-instruction').style.display = 'block';
+      document.getElementById('revealed-pin-display').textContent = 'PIN-XXXX-XXXX';
+      
+      document.getElementById('modal-chest').classList.add('active');
+    };
+
+    const triggerChestOpening = () => {
+      const chest = document.getElementById('treasure-chest-gfx');
+      
+      // Sound FX
+      playAudioSynth('chest');
+      
+      chest.className = 'chest';
+      chest.style.transform = 'scale(1.25)';
+      
+      setTimeout(() => {
+        chest.style.transform = 'scale(1)';
+        chest.style.backgroundImage = "url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2220%22 y=%2245%22 width=%2260%22 height=%2240%22 rx=%226%22 fill=%22%23b45309%22 stroke=%22%2378350f%22 stroke-width=%224%22/><path d=%22M 15 25 Q 50 5, 85 25 Z%22 fill=%22%23d97706%22 stroke=%22%2378350f%22 stroke-width=%224%22 transform=%22rotate(-30, 20, 25)%22/><polygon points=%2250,30 65,45 35,45%22 fill=%22%23fbbf24%22/><rect x=%2244%22 y=%2240%22 width=%2212%22 height=%2216%22 rx=%222%22 fill=%22%23fbbf24%22 stroke=%22%23d97706%22 stroke-width=%222%22/><circle cx=%2250%22 cy=%2248%22 r=%223%22 fill=%22%2378350f%22/></svg>')";
+        
+        // Trigger visual confetti explosion
+        triggerConfetti();
+        playAudioSynth('success');
+        
+        // Show PIN
+        document.getElementById('chest-reveal-card').style.display = 'block';
+        document.getElementById('revealed-pin-display').textContent = appState.profile.unlockedPin;
+        document.getElementById('chest-instruction').style.display = 'none';
+        
+      }, 600);
+    };
+
+    // ==========================================
+    // PARENT SECURITY LOCK GATE & PIN PAD
+    // ==========================================
+    const openParentGate = () => {
+      appState.enteredGateCode = '';
+      document.getElementById('gate-typed-value').innerHTML = '&nbsp;';
+      document.getElementById('modal-parent-gate').classList.add('active');
+    };
+
+    const pressGateKey = (num) => {
+      if (appState.enteredGateCode.length < 3) {
+        appState.enteredGateCode += num;
+        document.getElementById('gate-typed-value').textContent = appState.enteredGateCode;
+        
+        if (parseInt(appState.enteredGateCode) === appState.currentGateCode) {
+          // Success! Access parent section
+          setTimeout(() => {
+            closeModal('modal-parent-gate');
+            navigate('screen-parent');
+          }, 250);
+        }
+      }
+    };
+
+    const clearGateKey = () => {
+      appState.enteredGateCode = '';
+      document.getElementById('gate-typed-value').innerHTML = '&nbsp;';
+    };
+
+    const exitParentMode = () => {
+      navigate('screen-map');
+    };
+
+    // Map initiation modal helper
+    const openInitiationSummaryModal = () => {
+      document.getElementById('modal-initiation-summary').classList.add('active');
+    };
+
+    const playMockQuest = (day) => {
+      alert(`⚔️ Heading to quest ${day}: Lava Bridge! Ready to practice spelling and multiplication sets? (Map Quest gameplay is locked in baseline mode).`);
+    };
+
+    const alertLockedDay = (day) => {
+      alert(`🔒 Day ${day} is currently locked. Complete previous days to advance along the quest path!`);
+    };
+
+    // General modal close helper
+    const closeModal = (modalId) => {
+      document.getElementById(modalId).classList.remove('active');
+    };
+
+
+    // ==========================================
+    // CANVAS CONFETTI CELEBRATION
+    // ==========================================
+    const triggerConfetti = () => {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#fbbf24', '#3b82f6', '#10b981', '#ec4899', '#8b5cf6'];
+
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 8 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: Math.random() * 4 - 2,
+          vy: Math.random() * 5 + 4,
+          rot: Math.random() * 360,
+          rotSpeed: Math.random() * 4 - 2
+        });
+      }
+
+      const updateConfetti = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let active = false;
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.rotSpeed;
+
+          if (p.y < canvas.height) {
+            active = true;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rot * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+          }
+        });
+
+        if (active) {
+          requestAnimationFrame(updateConfetti);
+        }
+      };
+
+      updateConfetti();
+    };
+
+    // Window size adjustment listeners
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confetti-canvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+
+    // Populate initial parent rewards payout UI list
+    window.onload = () => {
+      renderParentQueue();
+    };
+  </script>
+</body>
 </html>
