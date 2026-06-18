@@ -1,0 +1,523 @@
+/* Dashboard Styles */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-emoji {
+  font-size: 2.5rem;
+  animation: bounce 2s infinite ease-in-out;
+}
+
+.stats-container {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-chip {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-fun);
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.stat-icon {
+  font-size: 1.3rem;
+}
+
+/* Profiles */
+.profile-selection {
+  text-align: center;
+  max-width: 600px;
+  margin: 60px auto;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 480px) {
+  .avatar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.avatar-card {
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 20px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-card:hover {
+  transform: translateY(-5px);
+  border-color: #a855f7;
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.15);
+}
+
+.avatar-card.selected {
+  border-color: #a855f7;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+  transform: scale(1.05);
+}
+
+.avatar-emoji {
+  font-size: 3rem;
+}
+
+.avatar-name {
+  font-family: var(--font-fun);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.name-input-group {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.name-input {
+  font-family: var(--font-text);
+  font-size: 1.1rem;
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: 2px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  width: 250px;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: #a855f7;
+}
+
+/* Mode Select Dashboard */
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .mode-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+.mode-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+}
+
+.mode-icon {
+  font-size: 4.5rem;
+  margin-bottom: 16px;
+  animation: bounce 3s infinite ease-in-out;
+}
+
+.mode-card h2 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.mode-card p {
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  max-width: 320px;
+}
+
+/* Quest / Game Screen Layout */
+.game-container {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.back-button {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  margin-bottom: 24px;
+}
+
+.back-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.progress-bar {
+  flex-grow: 1;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  min-width: 45px;
+}
+
+/* Spelling Quest Styles */
+.speaker-button {
+  background: #a855f7;
+  color: white;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+}
+
+.speaker-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 24px rgba(168, 85, 247, 0.45);
+}
+
+.clue-box {
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px dashed rgba(168, 85, 247, 0.3);
+  padding: 16px 24px;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+  color: var(--text-primary);
+}
+
+/* Letter Assembly Area */
+.letters-assemble-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.letter-slots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  min-height: 70px;
+  flex-wrap: wrap;
+}
+
+.letter-bubble {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 3px solid var(--card-border);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-fun);
+  font-size: 1.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.letter-bubble.active {
+  background: linear-gradient(135deg, #a855f7 0%, #818cf8 100%);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(168, 85, 247, 0.2);
+}
+
+.letter-bubble.empty-slot {
+  background: rgba(0, 0, 0, 0.05);
+  border: 2px dashed var(--text-muted);
+  box-shadow: none;
+}
+
+.scrambled-letters {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid var(--card-border);
+}
+
+.scrambled-letter {
+  cursor: pointer;
+}
+
+.scrambled-letter.used {
+  opacity: 0.2;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+/* Control Buttons */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.btn-clear {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-clear:hover {
+  background: #e2e8f0;
+}
+
+.btn-check {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-check:hover {
+  background: #16a34a;
+  box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3);
+}
+
+/* Timetables Arena Styles */
+.timetable-selection {
+  text-align: center;
+}
+
+.table-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 32px 0;
+}
+
+@media (max-width: 576px) {
+  .table-selector-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.table-selector-btn {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 2px solid var(--card-border);
+  padding: 20px;
+  font-size: 1.5rem;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.table-selector-btn:hover {
+  transform: translateY(-4px);
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.05);
+}
+
+.table-selector-btn.mixed {
+  grid-column: span 4;
+  background: linear-gradient(135deg, #0ea5e9 0%, #34d399 100%);
+  color: white;
+  border: none;
+}
+
+@media (max-width: 576px) {
+  .table-selector-btn.mixed {
+    grid-column: span 3;
+  }
+}
+
+.table-selector-btn.mixed:hover {
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+}
+
+/* Question Area for Math */
+.math-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  margin-bottom: 24px;
+}
+
+.math-expression {
+  font-family: var(--font-fun);
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  letter-spacing: 2px;
+}
+
+.math-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.math-option-btn {
+  padding: 24px;
+  font-size: 1.8rem;
+  border-radius: 24px;
+  background: var(--card-bg);
+  border: 3px solid var(--card-border);
+  color: var(--text-primary);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.math-option-btn:hover {
+  transform: scale(1.05);
+  border-color: #38bdf8;
+  box-shadow: 0 8px 16px rgba(56, 189, 248, 0.2);
+}
+
+.math-option-btn.correct {
+  background: #4ade80 !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+.math-option-btn.incorrect {
+  background: #f87171 !important;
+  color: white !important;
+  border-color: transparent !important;
+}
+
+/* Feedback Box */
+.feedback-box {
+  margin-top: 24px;
+  font-family: var(--font-fun);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.feedback-box.correct {
+  color: #22c55e;
+}
+
+.feedback-box.incorrect {
+  color: #ef4444;
+}
+
+/* Reward / Level Up Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  padding: 40px;
+}
+
+.modal-emoji {
+  font-size: 5rem;
+  animation: bounce 1s infinite alternate;
+  margin-bottom: 20px;
+}
+
+.modal-stars {
+  font-size: 2rem;
+  color: #fbbf24;
+  margin: 16px 0;
+}
+
+.badge-reward {
+  background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+  border: 3px solid #eab308;
+  padding: 16px;
+  border-radius: 20px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+  box-shadow: 0 8px 24px rgba(234, 179, 8, 0.25);
+  animation: bounce 2s infinite ease-in-out;
+}
+
+.badge-reward-icon {
+  font-size: 3rem;
+}
+
+.badge-reward-title {
+  font-family: var(--font-fun);
+  font-weight: 700;
+  color: #854d0e;
+  margin-top: 8px;
+}
+
+/* Confetti Canvas */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+}
