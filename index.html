@@ -1093,8 +1093,8 @@
     <div class="glass-card" style="max-width: 720px; margin: auto; width: 100%;">
       <div class="avatar-selection">
         <div>
-          <h2 class="title-display" style="font-size: 2.2rem; margin-bottom: 8px;">Create Your Explorer!</h2>
-          <p style="color: var(--text-muted);">Choose a character and enter your name to start the baseline initiation.</p>
+          <h2 class="title-display" style="font-size: 2.2rem; margin-bottom: 8px;">Choose Your Wizard Hero! 🧙‍♂️</h2>
+          <p style="color: var(--text-muted);">Select a character and enter your name to begin your magical quest.</p>
         </div>
 
         <!-- Character Selection Grid -->
@@ -1120,7 +1120,7 @@
         <div class="form-group">
           <input type="text" id="explorer-name" class="name-input" placeholder="Explorer's Name..." value="Harry">
           <button class="btn-glow" style="margin-top: 10px;" onclick="submitProfile()">
-            Begin Initiation ⚔️
+            Begin Wizard Journey ⚔️
           </button>
         </div>
       </div>
@@ -1130,24 +1130,24 @@
   <!-- SCREEN 2: INITIATION GATEWAY (DAY 0 SUMMARY) -->
   <div id="screen-initiation-intro" class="screen">
     <div class="glass-card initiation-box">
-      <h2 class="title-display" style="font-size: 2rem; margin-bottom: 8px;">The Explorer's Initiation</h2>
+      <h2 class="title-display" style="font-size: 2rem; margin-bottom: 8px;">Prepare for Adventure! 🧙‍♂️</h2>
       <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 580px; margin: 0 auto 16px;">
-        Welcome <span id="intro-name-span" style="color: var(--gold); font-weight: 700;">Explorer</span>! Before the magical scrolling map opens, we must test your spelling fluency and math speed to calibrate your 30-day quest path!
+        <span id="intro-name-span" style="color: var(--gold); font-weight: 700;">Harry</span>, time to prepare for your adventure! First, we need to check if you are ready to take on Death Eaters. Get ready...
       </p>
 
       <div style="background: rgba(15, 23, 42, 0.4); border-radius: 20px; padding: 16px; display: flex; gap: 16px; text-align: left; margin-bottom: 16px;">
         <div style="flex: 1; border-right: 1px dashed rgba(255,255,255,0.1); padding-right: 20px;">
-          <h3 style="color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">📖 Part 1: Fluency Test</h3>
-          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Read a short sentence from Harry Potter out loud using the browser microphone. Highlights words as you speak!</p>
+          <h3 style="color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">📖 Phonics Spell-Casting</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Read the spell sentence out loud into your microphone. Words will glow green as you speak to unlock your wand!</p>
         </div>
         <div style="flex: 1; padding-left: 10px;">
-          <h3 style="color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">⚡ Part 2: Math Sprint</h3>
-          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Solve 5 basic multiplication questions as fast as possible. Get 100 Gems instantly on completion!</p>
+          <h3 style="color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">⚡ Lightning Math Duel</h3>
+          <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">Solve 5 multiplication puzzles as fast as you can. Proving your speed earns you 100 gold Gems!</p>
         </div>
       </div>
 
       <button class="btn-glow" onclick="startInitiationReading()">
-        Start Reading Test 🚀
+        Start Wizard Training! ⚡
       </button>
     </div>
   </div>
@@ -1161,8 +1161,8 @@
         <div class="init-dot"></div>
       </div>
 
-      <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 4px;">Initiation: Phonics Fluency</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Read the sentence out loud. Microphones will light up green when matched!</p>
+      <h2 class="title-display" style="font-size: 1.8rem; margin-bottom: 4px;">Spell-Casting Practice 🪄</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px;">Speak the spell clearly. The words will glow green when your magic matches!</p>
 
       <div class="speech-box">
         <!-- Interactive paragraph word markup -->
@@ -1210,7 +1210,7 @@
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 class="title-display" style="font-size: 1.8rem; margin: 0;">Math Timed Sprint</h2>
+        <h2 class="title-display" style="font-size: 1.8rem; margin: 0;">Death Eater Math Duel! ⚡</h2>
         <div style="font-family: var(--font-display); font-size: 1.25rem; background: rgba(0,0,0,0.3); padding: 4px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
           Question: <span id="math-counter" style="color: var(--gold); font-weight: 700;">1/5</span>
         </div>
