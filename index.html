@@ -1200,11 +1200,7 @@
         </div>
       </div>
 
-      <!-- Simulation manual overwrite helper for testing in blocked browser frames -->
       <div style="margin-top: 12px; display: flex; justify-content: center; gap: 10px;">
-        <button class="btn-glow btn-secondary" style="padding: 10px 20px; font-size: 0.9rem;" onclick="simulateSpeechReading()">
-          🧪 Simulate Voice Read
-        </button>
         <button id="reading-next-btn" class="btn-glow btn-success" style="padding: 10px 20px; font-size: 0.9rem; display: none;" onclick="finishReadingTest()">
           Proceed to Math Sprint ▶
         </button>
@@ -1417,9 +1413,6 @@
           </div>
         </div>
         <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
-          <button class="btn-glow btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="simulateQuestSpeechReading()">
-            🧪 Simulate Voice Read
-          </button>
           <button id="quest-spelling-next-btn" class="btn-glow btn-success" style="padding: 8px 16px; font-size: 0.85rem; display: none;" onclick="startQuestMathSprint()">
             Proceed to Math Sprint ▶
           </button>
@@ -1940,32 +1933,7 @@
       }
     };
 
-    // Manual simulation fallback if WebSpeech fails, blocks, or lacks permissions
-    const simulateSpeechReading = () => {
-      let delay = 350;
-      appState.initiation.currentReadIdx = 0;
-      appState.initiation.wordAttempts = 0;
-      appState.initiation.stumbledIdxs = [];
-      document.getElementById('speech-wave-anim').classList.add('active');
-      document.getElementById('speech-info').textContent = '🔊 Simulating explorer reading...';
 
-      const simulateNextWord = () => {
-        if (appState.initiation.currentReadIdx < appState.initiation.readingWords.length) {
-          playAudioSynth('correct');
-          appState.initiation.currentReadIdx++;
-          updateReadingHighlights();
-          setTimeout(simulateNextWord, delay);
-        } else {
-          document.getElementById('speech-wave-anim').classList.remove('active');
-          document.getElementById('speech-info').textContent = '✅ Read complete! Proceed to Math.';
-          document.getElementById('reading-next-btn').style.display = 'inline-flex';
-          playAudioSynth('success');
-          updateReadingHighlights();
-        }
-      };
-
-      setTimeout(simulateNextWord, 400);
-    };
 
     const finishReadingTest = () => {
       navigate('screen-initiation-math');
@@ -2640,30 +2608,7 @@
       }
     };
 
-    const simulateQuestSpeechReading = () => {
-      let delay = 350;
-      currentQuestState.spellingIndex = 0;
-      currentQuestState.wordAttempts = 0;
-      currentQuestState.stumbledIdxs = [];
-      document.getElementById('quest-speech-wave-anim').classList.add('active');
-      document.getElementById('quest-speech-info').textContent = '🔊 Simulating reading...';
 
-      const step = () => {
-        if (currentQuestState.spellingIndex < currentQuestState.spellingWords.length) {
-          playAudioSynth('correct');
-          currentQuestState.spellingIndex++;
-          updateQuestReadingHighlights();
-          setTimeout(step, delay);
-        } else {
-          document.getElementById('quest-speech-wave-anim').classList.remove('active');
-          document.getElementById('quest-speech-info').textContent = '✅ Read complete! Proceed to Math.';
-          document.getElementById('quest-spelling-next-btn').style.display = 'inline-flex';
-          playAudioSynth('success');
-          updateQuestReadingHighlights();
-        }
-      };
-      setTimeout(step, 400);
-    };
 
     const startQuestMathSprint = () => {
       document.getElementById('quest-phase-badge').textContent = `Phase 2: Math Sprint`;
