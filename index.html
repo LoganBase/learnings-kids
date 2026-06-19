@@ -1253,73 +1253,11 @@
     <div class="map-wrapper" style="margin: auto 0;">
       <div class="map-grid-overlay"></div>
       
-      <div class="map-content-container">
+      <div id="map-content" class="map-content-container" style="width: 4420px;">
         <!-- SVG Connecting line drawing dots path between node bubbles -->
-        <svg class="map-svg-path">
-          <path id="map-curve-path" d="M 50 140 Q 220 30, 390 140 T 730 140 T 1070 140 T 1410 140 T 1750 140" fill="none" stroke="rgba(251, 191, 36, 0.25)" stroke-width="6" stroke-dasharray="12 12" />
+        <svg id="map-svg-element" class="map-svg-path" style="width: 100%; height: 100%;">
+          <path id="map-curve-path" d="" fill="none" stroke="rgba(251, 191, 36, 0.25)" stroke-width="6" stroke-dasharray="12 12" />
         </svg>
-
-        <!-- Node Day bubbles. Populated by script, styled dynamically -->
-        <!-- Day 0 (Start node) -->
-        <div class="map-node-container" style="left: 40px; top: 106px;">
-          <div class="map-node complete" onclick="openInitiationSummaryModal()">👑</div>
-          <span class="map-node-label">Initiation</span>
-        </div>
-
-        <!-- Day 1 (Next active day) -->
-        <div class="map-node-container" style="left: 210px; top: 56px;">
-          <div class="map-node active" onclick="playMockQuest(1)">1</div>
-          <span class="map-node-label">Lava Bridge</span>
-        </div>
-
-        <!-- Day 2 (Locked) -->
-        <div class="map-node-container" style="left: 380px; top: 106px;">
-          <div class="map-node locked" onclick="alertLockedDay(2)">2</div>
-          <span class="map-node-label">Deep Cave</span>
-        </div>
-
-        <!-- Day 3 (Locked) -->
-        <div class="map-node-container" style="left: 550px; top: 156px;">
-          <div class="map-node locked" onclick="alertLockedDay(3)">3</div>
-          <span class="map-node-label">Coral Reef</span>
-        </div>
-
-        <!-- Days 4 - 30 illustrative layout bubbles -->
-        <div class="map-node-container" style="left: 720px; top: 106px;">
-          <div class="map-node locked" onclick="alertLockedDay(4)">4</div>
-          <span class="map-node-label">Jungle Gate</span>
-        </div>
-
-        <div class="map-node-container" style="left: 890px; top: 56px;">
-          <div class="map-node locked" onclick="alertLockedDay(5)">5</div>
-          <span class="map-node-label">Volcano Pass</span>
-        </div>
-
-        <div class="map-node-container" style="left: 1060px; top: 106px;">
-          <div class="map-node locked" onclick="alertLockedDay(10)">10</div>
-          <span class="map-node-label">Skull Fortress</span>
-        </div>
-
-        <div class="map-node-container" style="left: 1230px; top: 156px;">
-          <div class="map-node locked" onclick="alertLockedDay(15)">15</div>
-          <span class="map-node-label">Lost Temple</span>
-        </div>
-
-        <div class="map-node-container" style="left: 1400px; top: 106px;">
-          <div class="map-node locked" onclick="alertLockedDay(20)">20</div>
-          <span class="map-node-label">Whispering Dunes</span>
-        </div>
-
-        <div class="map-node-container" style="left: 1570px; top: 96px;">
-          <div class="map-node locked" onclick="alertLockedDay(25)">25</div>
-          <span class="map-node-label">Frost Citadel</span>
-        </div>
-
-        <!-- Day 30 Final Chest -->
-        <div class="map-node-container" style="left: 1710px; top: 140px;">
-          <div class="map-node locked" style="border-radius: 16px; width: 80px; height: 80px; font-size: 2.2rem;" onclick="alertLockedDay(30)">🎁</div>
-          <span class="map-node-label">Final Treasure</span>
-        </div>
       </div>
     </div>
   </div>
@@ -1430,6 +1368,82 @@
         <div id="reward-queue-container" class="queue-list">
           <!-- Sourced by script, displays pending claims -->
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: PLAYABLE QUEST SCREEN -->
+  <div id="screen-quest" class="screen">
+    <div class="glass-card initiation-box" style="max-width: 680px; margin: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h2 id="quest-title" class="title-display" style="font-size: 1.8rem; margin: 0;">Quest 1: Lava Bridge</h2>
+        <div id="quest-phase-badge" style="font-family: var(--font-display); font-size: 1.1rem; background: rgba(0,0,0,0.3); padding: 4px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); color: var(--gold);">
+          Phase 1: Spelling
+        </div>
+      </div>
+
+      <!-- Spelling Phase UI -->
+      <div id="quest-spelling-phase">
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">Read the Harry Potter sentence out loud to cross the bridge!</p>
+        <div class="speech-box">
+          <div id="quest-paragraph-container" class="reading-paragraph">
+            <!-- Populated dynamically -->
+          </div>
+          <div class="mic-indicator-wrapper">
+            <button id="quest-mic-trigger" class="mic-button" onclick="toggleQuestSpeechListening()">
+              🎙️
+            </button>
+            <div id="quest-speech-wave-anim" class="speech-waves">
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+              <div class="wave-bar"></div>
+            </div>
+            <div id="quest-speech-info" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+              Click microphone to speak.
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
+          <button class="btn-glow btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="simulateQuestSpeechReading()">
+            🧪 Simulate Voice Read
+          </button>
+          <button id="quest-spelling-next-btn" class="btn-glow btn-success" style="padding: 8px 16px; font-size: 0.85rem; display: none;" onclick="startQuestMathSprint()">
+            Proceed to Math Sprint ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- Math Phase UI (starts hidden) -->
+      <div id="quest-math-phase" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Solve the multiplication puzzle!</span>
+          <div style="font-family: var(--font-display); font-size: 1.1rem; background: rgba(0,0,0,0.2); padding: 2px 10px; border-radius: 8px;">
+            Question: <span id="quest-math-counter" style="color: var(--gold); font-weight: 700;">1/5</span>
+          </div>
+        </div>
+        
+        <div class="timer-bar">
+          <div id="quest-math-timer-fill" class="timer-fill"></div>
+        </div>
+
+        <div class="glass-card" style="background: rgba(15, 23, 42, 0.4); margin-bottom: 12px; border-color: rgba(255,255,255,0.05); padding: 16px;">
+          <div id="quest-math-problem-box" class="math-problem">
+            <!-- Dynamic math problem -->
+          </div>
+        </div>
+
+        <div id="quest-math-options-grid" class="math-options">
+          <!-- Dynamic buttons -->
+        </div>
+      </div>
+      
+      <!-- Back button if they want to exit -->
+      <div style="margin-top: 14px; text-align: left;">
+        <button class="btn-glow btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 12px;" onclick="exitQuest()">
+          🏳️ Give Up
+        </button>
       </div>
     </div>
   </div>
@@ -1721,6 +1735,16 @@
         wallet.style.display = 'flex';
       } else {
         wallet.style.display = 'none';
+      }
+
+      if (screenId === 'screen-map') {
+        renderMap();
+        setTimeout(() => {
+          const activeNode = document.querySelector('.map-node.active');
+          if (activeNode) {
+            activeNode.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        }, 300);
       }
     };
 
@@ -2210,17 +2234,485 @@
       navigate('screen-map');
     };
 
-    // Map initiation modal helper
-    const openInitiationSummaryModal = () => {
-      document.getElementById('modal-initiation-summary').classList.add('active');
+    // Dynamic 30-day Map & Quest System Code
+    const questData = {
+      names: [
+        "Initiation",
+        "Lava Bridge",
+        "Deep Cave",
+        "Coral Reef",
+        "Jungle Gate",
+        "Volcano Pass",
+        "Whispering Dunes",
+        "Lost Temple",
+        "Frozen Peak",
+        "Forbidden Forest",
+        "Gryffindor Tower",
+        "Slytherin Dungeon",
+        "Quidditch Pitch",
+        "Hogsmeade Station",
+        "Shrieking Shack",
+        "Diagon Alley",
+        "Gringotts Vault",
+        "Hogwarts Express",
+        "Great Hall",
+        "Chamber of Secrets",
+        "Lake Grotto",
+        "Owlery Flight",
+        "Clock Tower",
+        "Astronomy Deck",
+        "Divination Attic",
+        "Greenhouse Flight",
+        "Black Lake",
+        "Dragon Lair",
+        "Phoenix Nest",
+        "Sorcerer's Chamber",
+        "Final Treasure Island"
+      ],
+      sentences: [
+        "Harry had a thin face and bright green eyes.",
+        "Alohomora! The locked door swings open.",
+        "Wingardium Leviosa! The feather floats high.",
+        "Expecto Patronum! A silver stag appears.",
+        "Lumos! The tip of the wand lights up.",
+        "Expelliarmus! The red spark disarms him.",
+        "The sorting hat puts Harry in Gryffindor.",
+        "Ron rides a broomstick to catch the snitch.",
+        "Dumbledore has a long silver beard and wand.",
+        "Hagrid takes care of magical creatures.",
+        "Hermione reads a heavy book about spells.",
+        "A golden snitch flies fast in the air.",
+        "The Hogwarts Express rolls down the tracks.",
+        "Professor Snape brews a green magic potion.",
+        "The owl flies to deliver a letter.",
+        "Fawkes the phoenix spreads his orange wings.",
+        "A house elf snaps his fingers to magic.",
+        "The marauders map shows secret passages.",
+        "Butterbeer is served warm in mugs.",
+        "The triwizard cup glows on the table.",
+        "A scary basilisk slithers in the chamber.",
+        "Harry catches the flying key in the air.",
+        "The wand chooses the wizard at the shop.",
+        "Sirius Black flies away on a hippogriff.",
+        "Professor Lupin teaches defense classes.",
+        "Chocolate frogs jump out of their boxes.",
+        "The knight bus drives fast through London.",
+        "Dobby is a free elf and wears socks.",
+        "The secret room appears when you need it.",
+        "We must defeat the dark forces together.",
+        "The explorer unlocks the final treasure chest!"
+      ]
     };
 
-    const playMockQuest = (day) => {
-      alert(`⚔️ Heading to quest ${day}: Lava Bridge! Ready to practice spelling and multiplication sets? (Map Quest gameplay is locked in baseline mode).`);
+    const currentQuestState = {
+      day: 0,
+      spellingWords: [],
+      spellingIndex: 0,
+      mathIndex: 0,
+      mathQuestions: [],
+      mathScores: [],
+      mathTimer: 15,
+      mathTimerInterval: null,
+      mathStartTime: null,
+      isListening: false,
+      recognition: null
+    };
+
+    const renderMap = () => {
+      const container = document.getElementById('map-content');
+      if (!container) return;
+
+      const svg = document.getElementById('map-svg-element');
+      container.innerHTML = '';
+      container.appendChild(svg);
+
+      let dStr = `M ${40 + 34} ${106 + 34}`;
+      
+      for (let d = 0; d <= 30; d++) {
+        const left = 40 + d * 140;
+        const top = 106 + Math.sin(d * Math.PI / 2) * -50;
+        const x = left + 34;
+        const y = top + 34;
+
+        if (d > 0) {
+          const px = 40 + (d - 1) * 140 + 34;
+          const py = 106 + Math.sin((d - 1) * Math.PI / 2) * -50 + 34;
+          const ctrlX = (px + x) / 2;
+          const ctrlY = d % 2 === 1 ? 40 : 220; 
+          dStr += ` Q ${ctrlX} ${ctrlY}, ${x} ${y}`;
+        }
+
+        const nodeWrapper = document.createElement('div');
+        nodeWrapper.className = 'map-node-container';
+        nodeWrapper.style.left = `${left}px`;
+        nodeWrapper.style.top = `${top}px`;
+
+        let statusClass = 'locked';
+        let clickHandler = `alertLockedDay(${d})`;
+
+        if (d === 0) {
+          if (appState.profile.unlockedDay >= 1) {
+            statusClass = 'complete';
+            clickHandler = `openInitiationSummaryModal()`;
+          } else {
+            statusClass = 'active';
+            clickHandler = `alert("Complete initiation details first!")`;
+          }
+        } else {
+          if (d < appState.profile.unlockedDay) {
+            statusClass = 'complete';
+            clickHandler = `startQuest(${d})`; 
+          } else if (d === appState.profile.unlockedDay) {
+            statusClass = 'active';
+            clickHandler = `startQuest(${d})`;
+          }
+        }
+
+        const emojiOrNum = d === 0 ? '👑' : (d === 30 ? '🎁' : d);
+        
+        nodeWrapper.innerHTML = `
+          <div class="map-node ${statusClass}" onclick="${clickHandler}">${emojiOrNum}</div>
+          <span class="map-node-label">${d === 0 ? 'Initiation' : (d === 30 ? 'Final Treasure' : questData.names[d])}</span>
+        `;
+        container.appendChild(nodeWrapper);
+      }
+
+      const path = document.getElementById('map-curve-path');
+      if (path) {
+        path.setAttribute('d', dStr);
+      }
+    };
+
+    const startQuest = (day) => {
+      clearInterval(currentQuestState.mathTimerInterval);
+      if (currentQuestState.recognition) {
+        try { currentQuestState.recognition.stop(); } catch(e){}
+      }
+
+      currentQuestState.day = day;
+      currentQuestState.spellingIndex = 0;
+      currentQuestState.mathIndex = 0;
+      currentQuestState.mathScores = [];
+      currentQuestState.isListening = false;
+
+      const sentence = questData.sentences[day];
+      currentQuestState.spellingWords = sentence.split(" ");
+
+      currentQuestState.mathQuestions = [];
+      for (let i = 0; i < 5; i++) {
+        const rangeMax = day <= 3 ? 5 : (day <= 10 ? 8 : 12);
+        const num1 = Math.floor(Math.random() * (rangeMax - 1)) + 2; 
+        const num2 = Math.floor(Math.random() * 8) + 2; 
+        const ans = num1 * num2;
+        
+        const opts = [ans];
+        while (opts.length < 4) {
+          const fake = (Math.floor(Math.random() * (rangeMax - 1)) + 2) * (Math.floor(Math.random() * 8) + 2);
+          if (!opts.includes(fake)) opts.push(fake);
+        }
+        opts.sort(() => Math.random() - 0.5);
+        currentQuestState.mathQuestions.push({ num1, num2, ans, opts });
+      }
+
+      document.getElementById('quest-title').textContent = `Quest ${day}: ${questData.names[day]}`;
+      document.getElementById('quest-phase-badge').textContent = `Phase 1: Phonics`;
+      document.getElementById('quest-spelling-phase').style.display = 'block';
+      document.getElementById('quest-math-phase').style.display = 'none';
+      document.getElementById('quest-spelling-next-btn').style.display = 'none';
+      
+      const container = document.getElementById('quest-paragraph-container');
+      container.innerHTML = '';
+      currentQuestState.spellingWords.forEach((word, idx) => {
+        const span = document.createElement('span');
+        span.className = 'reading-word';
+        span.id = `q-read-w-${idx}`;
+        span.textContent = word;
+        container.appendChild(span);
+      });
+
+      updateQuestReadingHighlights();
+      navigate('screen-quest');
+    };
+
+    const updateQuestReadingHighlights = () => {
+      const idx = currentQuestState.spellingIndex;
+      currentQuestState.spellingWords.forEach((_, i) => {
+        const el = document.getElementById(`q-read-w-${i}`);
+        if (el) {
+          el.className = 'reading-word';
+          if (i < idx) {
+            el.classList.add('read');
+          } else if (i === idx) {
+            el.classList.add('current');
+          }
+        }
+      });
+    };
+
+    const toggleQuestSpeechListening = () => {
+      const trigger = document.getElementById('quest-mic-trigger');
+      const wave = document.getElementById('quest-speech-wave-anim');
+      const info = document.getElementById('quest-speech-info');
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        info.innerHTML = "❌ Speech Recognition not supported in this frame.<br>Click 'Simulate Voice Read' below!";
+        return;
+      }
+
+      if (currentQuestState.isListening) {
+        currentQuestState.isListening = false;
+        trigger.classList.remove('listening');
+        wave.classList.remove('active');
+        info.textContent = 'Speech Stopped. Click mic to start.';
+        if (currentQuestState.recognition) currentQuestState.recognition.stop();
+      } else {
+        currentQuestState.isListening = true;
+        trigger.classList.add('listening');
+        wave.classList.add('active');
+        info.textContent = 'Listening... Speak clearly!';
+        
+        try {
+          currentQuestState.recognition = new SpeechRecognition();
+          currentQuestState.recognition.continuous = true;
+          currentQuestState.recognition.interimResults = true;
+          currentQuestState.recognition.lang = 'en-US';
+
+          currentQuestState.recognition.onresult = (event) => {
+            const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
+            processQuestSpokenText(transcript);
+          };
+
+          currentQuestState.recognition.onerror = (err) => {
+            console.error('Speech error', err);
+            info.innerHTML = "⚠️ Mic Access Error.<br>Please use the 'Simulate Voice Read' fallback.";
+          };
+
+          currentQuestState.recognition.start();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    };
+
+    const processQuestSpokenText = (transcript) => {
+      const idx = currentQuestState.spellingIndex;
+      const targetWord = currentQuestState.spellingWords[idx]
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
+        .toLowerCase();
+
+      if (transcript.includes(targetWord)) {
+        playAudioSynth('correct');
+        currentQuestState.spellingIndex++;
+        
+        if (currentQuestState.spellingIndex >= currentQuestState.spellingWords.length) {
+          currentQuestState.isListening = false;
+          document.getElementById('quest-mic-trigger').classList.remove('listening');
+          document.getElementById('quest-speech-wave-anim').classList.remove('active');
+          document.getElementById('quest-speech-info').textContent = '✅ Completed reading! Press button below.';
+          document.getElementById('quest-spelling-next-btn').style.display = 'inline-flex';
+          playAudioSynth('success');
+          if (currentQuestState.recognition) currentQuestState.recognition.stop();
+        }
+        
+        updateQuestReadingHighlights();
+      }
+    };
+
+    const simulateQuestSpeechReading = () => {
+      let delay = 350;
+      currentQuestState.spellingIndex = 0;
+      document.getElementById('quest-speech-wave-anim').classList.add('active');
+      document.getElementById('quest-speech-info').textContent = '🔊 Simulating reading...';
+
+      const step = () => {
+        if (currentQuestState.spellingIndex < currentQuestState.spellingWords.length) {
+          playAudioSynth('correct');
+          currentQuestState.spellingIndex++;
+          updateQuestReadingHighlights();
+          setTimeout(step, delay);
+        } else {
+          document.getElementById('quest-speech-wave-anim').classList.remove('active');
+          document.getElementById('quest-speech-info').textContent = '✅ Read complete! Proceed to Math.';
+          document.getElementById('quest-spelling-next-btn').style.display = 'inline-flex';
+          playAudioSynth('success');
+        }
+      };
+      setTimeout(step, 400);
+    };
+
+    const startQuestMathSprint = () => {
+      document.getElementById('quest-phase-badge').textContent = `Phase 2: Math Sprint`;
+      document.getElementById('quest-spelling-phase').style.display = 'none';
+      document.getElementById('quest-math-phase').style.display = 'block';
+      loadQuestMathQuestion();
+    };
+
+    const loadQuestMathQuestion = () => {
+      const idx = currentQuestState.mathIndex;
+      const data = currentQuestState.mathQuestions[idx];
+      
+      document.getElementById('quest-math-counter').textContent = `${idx + 1}/5`;
+      
+      const box = document.getElementById('quest-math-problem-box');
+      box.innerHTML = `
+        <span>${data.num1}</span>
+        <span style="color: var(--gold)">×</span>
+        <span>${data.num2}</span>
+        <span style="color: var(--gold)">=</span>
+        <span style="color: var(--gold); border-bottom: 4px solid var(--gold); width: 60px; min-height: 70px; display: inline-block;"></span>
+      `;
+
+      const grid = document.getElementById('quest-math-options-grid');
+      grid.innerHTML = '';
+      data.opts.forEach(option => {
+        const btn = document.createElement('button');
+        btn.className = 'math-opt-btn';
+        btn.textContent = option;
+        btn.onclick = () => chooseQuestMathAnswer(option, btn);
+        grid.appendChild(btn);
+      });
+
+      clearInterval(currentQuestState.mathTimerInterval);
+      currentQuestState.mathTimer = 15;
+      currentQuestState.mathStartTime = Date.now();
+      
+      const timerFill = document.getElementById('quest-math-timer-fill');
+      timerFill.style.width = '100%';
+
+      currentQuestState.mathTimerInterval = setInterval(() => {
+        currentQuestState.mathTimer -= 0.1;
+        const pct = (currentQuestState.mathTimer / 15) * 100;
+        timerFill.style.width = `${pct}%`;
+
+        if (currentQuestState.mathTimer <= 0) {
+          clearInterval(currentQuestState.mathTimerInterval);
+          playAudioSynth('wrong');
+          highlightQuestCorrectOptionAndNext();
+        }
+      }, 100);
+    };
+
+    const chooseQuestMathAnswer = (val, clickedBtn) => {
+      clearInterval(currentQuestState.mathTimerInterval);
+      const idx = currentQuestState.mathIndex;
+      const data = currentQuestState.mathQuestions[idx];
+      const correctAns = data.ans;
+      const duration = (Date.now() - currentQuestState.mathStartTime) / 1000;
+
+      document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+
+      if (val === correctAns) {
+        clickedBtn.classList.add('correct');
+        playAudioSynth('correct');
+        currentQuestState.mathScores.push({ correct: true, speed: duration });
+      } else {
+        clickedBtn.classList.add('wrong');
+        playAudioSynth('wrong');
+        currentQuestState.mathScores.push({ correct: false, speed: duration });
+        
+        document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => {
+          if (parseInt(btn.textContent) === correctAns) {
+            btn.classList.add('correct');
+          }
+        });
+      }
+
+      setTimeout(() => {
+        currentQuestState.mathIndex++;
+        if (currentQuestState.mathIndex < 5) {
+          loadQuestMathQuestion();
+        } else {
+          finishQuest();
+        }
+      }, 1500);
+    };
+
+    const highlightQuestCorrectOptionAndNext = () => {
+      document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+      const idx = currentQuestState.mathIndex;
+      const data = currentQuestState.mathQuestions[idx];
+      
+      currentQuestState.mathScores.push({ correct: false, speed: 15 });
+
+      document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => {
+        if (parseInt(btn.textContent) === data.ans) {
+          btn.classList.add('correct');
+        }
+      });
+
+      setTimeout(() => {
+        currentQuestState.mathIndex++;
+        if (currentQuestState.mathIndex < 5) {
+          loadQuestMathQuestion();
+        } else {
+          finishQuest();
+        }
+      }, 1500);
+    };
+
+    const finishQuest = () => {
+      clearInterval(currentQuestState.mathTimerInterval);
+      const scores = currentQuestState.mathScores;
+      const totalCorrect = scores.filter(s => s.correct).length;
+      const avgSpeed = scores.reduce((sum, s) => sum + s.speed, 0) / 5;
+
+      const mathAccuracy = Math.round((totalCorrect / 5) * 100);
+      const mathAvgSpeed = avgSpeed.toFixed(1);
+
+      const gemReward = 20;
+      appState.profile.gems += gemReward;
+      appState.profile.robux += gemReward; 
+
+      const currentDay = currentQuestState.day;
+      if (currentDay === appState.profile.unlockedDay && appState.profile.unlockedDay < 30) {
+        appState.profile.unlockedDay = currentDay + 1;
+      }
+
+      document.getElementById('gem-balance').textContent = appState.profile.gems;
+      document.getElementById('robux-balance').textContent = `R$ ${appState.profile.robux}`;
+      document.getElementById('wallet-gems-modal').textContent = `${appState.profile.gems} Gems`;
+
+      updateParentDashboardStats(100, mathAccuracy, parseFloat(mathAvgSpeed));
+
+      triggerConfetti();
+      playAudioSynth('success');
+
+      alert(`🎉 Quest Complete! You crossed the bridge and earned ${gemReward} Gems! 💎`);
+      navigate('screen-map');
+    };
+
+    const updateParentDashboardStats = (readingAcc, mathAcc, speedVal) => {
+      const rM = document.getElementById('parent-reading-metric');
+      const mM = document.getElementById('parent-math-metric');
+      const sM = document.getElementById('parent-speed-metric');
+
+      if (rM && mM && sM) {
+        const prevReading = parseFloat(rM.textContent) || 90;
+        const prevMath = parseFloat(mM.textContent) || 80;
+        const prevSpeed = parseFloat(sM.textContent) || 2.8;
+
+        rM.textContent = `${Math.round((prevReading + readingAcc) / 2)}%`;
+        mM.textContent = `${Math.round((prevMath + mathAcc) / 2)}%`;
+        sM.textContent = `${((prevSpeed + speedVal) / 2).toFixed(1)}s`;
+      }
+    };
+
+    const exitQuest = () => {
+      clearInterval(currentQuestState.mathTimerInterval);
+      if (currentQuestState.recognition) {
+        try { currentQuestState.recognition.stop(); } catch(e){}
+      }
+      navigate('screen-map');
     };
 
     const alertLockedDay = (day) => {
       alert(`🔒 Day ${day} is currently locked. Complete previous days to advance along the quest path!`);
+    };
+
+    const openInitiationSummaryModal = () => {
+      document.getElementById('modal-initiation-summary').classList.add('active');
     };
 
     // General modal close helper
@@ -2294,6 +2786,7 @@
     // Populate initial parent rewards payout UI list
     window.onload = () => {
       renderParentQueue();
+      renderMap();
     };
   </script>
 </body>
