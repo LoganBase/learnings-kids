@@ -476,6 +476,21 @@
       text-decoration: underline dashed var(--red-fail);
     }
 
+    .math-input-correct {
+      border-color: var(--green-success) !important;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4) !important;
+      background: rgba(16, 185, 129, 0.1) !important;
+      color: white !important;
+    }
+
+    .math-input-wrong {
+      border-color: var(--red-fail) !important;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4) !important;
+      background: rgba(239, 68, 68, 0.1) !important;
+      color: white !important;
+      animation: shake 0.4s;
+    }
+
     .mic-indicator-wrapper {
       display: flex;
       flex-direction: column;
@@ -1234,8 +1249,9 @@
         </div>
       </div>
 
-      <div id="math-options-grid" class="math-options">
-        <!-- Populated by JS -->
+      <div class="math-input-container" style="display: flex; gap: 12px; max-width: 320px; margin: 12px auto 0; justify-content: center; align-items: center; width: 100%;">
+        <input id="math-typed-answer" type="number" pattern="[0-9]*" inputmode="numeric" class="name-input" style="font-size: 1.8rem; font-family: var(--font-display); width: 140px; padding: 10px;" placeholder="?" autofocus>
+        <button class="btn-glow btn-success" style="padding: 12px 24px; font-size: 1rem; border-radius: 16px;" onclick="submitMathAnswer()">Cast ⚡</button>
       </div>
     </div>
   </div>
@@ -1438,8 +1454,9 @@
           </div>
         </div>
 
-        <div id="quest-math-options-grid" class="math-options">
-          <!-- Dynamic buttons -->
+        <div class="math-input-container" style="display: flex; gap: 12px; max-width: 320px; margin: 12px auto 0; justify-content: center; align-items: center; width: 100%;">
+          <input id="quest-math-typed-answer" type="number" pattern="[0-9]*" inputmode="numeric" class="name-input" style="font-size: 1.8rem; font-family: var(--font-display); width: 140px; padding: 10px;" placeholder="?" autofocus>
+          <button class="btn-glow btn-success" style="padding: 12px 24px; font-size: 1rem; border-radius: 16px;" onclick="submitQuestMathAnswer()">Cast ⚡</button>
         </div>
       </div>
       
@@ -1943,9 +1960,46 @@
     // ==========================================
     // PART 2: MATH timed SPRINT
     // ==========================================
+    // Dynamically scales multiplication factors based on progress day
+    const generateMathFactors = (day) => {
+      let minFactor, maxFactor;
+      if (day === 0) { // Day 0 Initiation: 2s, 3s, 4s, 5s
+        minFactor = 2;
+        maxFactor = 5;
+      } else if (day <= 5) { // Quest 1-5: 2s, 3s, 4s
+        minFactor = 2;
+        maxFactor = 5;
+      } else if (day <= 10) { // Quest 6-10: 4s, 5s, 6s
+        minFactor = 4;
+        maxFactor = 7;
+      } else if (day <= 20) { // Quest 11-20: 6s, 7s, 8s
+        minFactor = 6;
+        maxFactor = 9;
+      } else { // Quest 21-30: 8s, 9s, 10s, 11s, 12s
+        minFactor = 8;
+        maxFactor = 12;
+      }
+      
+      const num1 = Math.floor(Math.random() * (maxFactor - minFactor + 1)) + minFactor;
+      const num2 = Math.floor(Math.random() * 11) + 2; // Multiplied by 2 to 12
+      return { num1, num2 };
+    };
+
     const startMathSprint = () => {
       appState.initiation.mathIndex = 0;
       appState.initiation.mathScores = [];
+      
+      // Dynamic generation of Day 0 Initiation questions (basic 2s to 5s)
+      appState.initiation.mathQuestions = [];
+      for (let i = 0; i < 5; i++) {
+        const factors = generateMathFactors(0);
+        appState.initiation.mathQuestions.push({
+          num1: factors.num1,
+          num2: factors.num2,
+          ans: factors.num1 * factors.num2
+        });
+      }
+
       loadMathQuestion();
     };
 
@@ -1965,16 +2019,19 @@
         <span style="color: var(--gold); border-bottom: 4px solid var(--gold); width: 60px; min-height: 70px; display: inline-block;"></span>
       `;
 
-      // Render Options buttons
-      const grid = document.getElementById('math-options-grid');
-      grid.innerHTML = '';
-      data.opts.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'math-opt-btn';
-        btn.textContent = option;
-        btn.onclick = () => chooseMathAnswer(option, btn);
-        grid.appendChild(btn);
-      });
+      // Set up typing input area
+      const input = document.getElementById('math-typed-answer');
+      input.value = '';
+      input.disabled = false;
+      input.className = 'name-input';
+      input.focus();
+
+      // Submit on pressing Enter
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          submitMathAnswer();
+        }
+      };
 
       // Restart Timer parameters (15 seconds total)
       clearInterval(appState.initiation.mathTimerInterval);
@@ -1991,15 +2048,13 @@
 
         if (appState.initiation.mathTimer <= 0) {
           clearInterval(appState.initiation.mathTimerInterval);
-          // Time ran out! Torch flicker sound, select correct as default penalty
           playAudioSynth('wrong');
-          // Highlight correct answer and advance
-          highlightCorrectOptionAndNext();
+          revealMathTimeoutAndNext();
         }
       }, 100);
     };
 
-    const chooseMathAnswer = (val, clickedBtn) => {
+    const submitMathAnswer = () => {
       clearInterval(appState.initiation.mathTimerInterval);
       
       const idx = appState.initiation.mathIndex;
@@ -2007,24 +2062,19 @@
       const correctAns = data.ans;
       const duration = (Date.now() - appState.initiation.mathStartTime) / 1000;
 
-      // Lock buttons
-      document.querySelectorAll('.math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+      const input = document.getElementById('math-typed-answer');
+      const val = parseInt(input.value.trim());
+      input.disabled = true;
 
       if (val === correctAns) {
-        clickedBtn.classList.add('correct');
+        input.className = 'name-input math-input-correct';
         playAudioSynth('correct');
         appState.initiation.mathScores.push({ correct: true, speed: duration });
       } else {
-        clickedBtn.classList.add('wrong');
+        input.className = 'name-input math-input-wrong';
         playAudioSynth('wrong');
         appState.initiation.mathScores.push({ correct: false, speed: duration });
-        
-        // Highlight correct button as helper hint
-        document.querySelectorAll('.math-opt-btn').forEach(btn => {
-          if (parseInt(btn.textContent) === correctAns) {
-            btn.classList.add('correct');
-          }
-        });
+        input.value = correctAns; // Show correct answer
       }
 
       // Advance question index
@@ -2033,24 +2083,20 @@
         if (appState.initiation.mathIndex < 5) {
           loadMathQuestion();
         } else {
-          // Finished initiation math sprint!
           triggerInitiationCompletion();
         }
       }, 1500);
     };
 
-    const highlightCorrectOptionAndNext = () => {
-      document.querySelectorAll('.math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+    const revealMathTimeoutAndNext = () => {
       const idx = appState.initiation.mathIndex;
       const data = appState.initiation.mathQuestions[idx];
-      
       appState.initiation.mathScores.push({ correct: false, speed: 15 });
 
-      document.querySelectorAll('.math-opt-btn').forEach(btn => {
-        if (parseInt(btn.textContent) === data.ans) {
-          btn.classList.add('correct');
-        }
-      });
+      const input = document.getElementById('math-typed-answer');
+      input.disabled = true;
+      input.className = 'name-input math-input-wrong';
+      input.value = data.ans;
 
       setTimeout(() => {
         appState.initiation.mathIndex++;
@@ -2445,18 +2491,12 @@
 
       currentQuestState.mathQuestions = [];
       for (let i = 0; i < 5; i++) {
-        const rangeMax = day <= 3 ? 5 : (day <= 10 ? 8 : 12);
-        const num1 = Math.floor(Math.random() * (rangeMax - 1)) + 2; 
-        const num2 = Math.floor(Math.random() * 8) + 2; 
-        const ans = num1 * num2;
-        
-        const opts = [ans];
-        while (opts.length < 4) {
-          const fake = (Math.floor(Math.random() * (rangeMax - 1)) + 2) * (Math.floor(Math.random() * 8) + 2);
-          if (!opts.includes(fake)) opts.push(fake);
-        }
-        opts.sort(() => Math.random() - 0.5);
-        currentQuestState.mathQuestions.push({ num1, num2, ans, opts });
+        const factors = generateMathFactors(day);
+        currentQuestState.mathQuestions.push({
+          num1: factors.num1,
+          num2: factors.num2,
+          ans: factors.num1 * factors.num2
+        });
       }
 
       document.getElementById('quest-title').textContent = `Quest ${day}: ${questData.names[day]}`;
@@ -2632,15 +2672,17 @@
         <span style="color: var(--gold); border-bottom: 4px solid var(--gold); width: 60px; min-height: 70px; display: inline-block;"></span>
       `;
 
-      const grid = document.getElementById('quest-math-options-grid');
-      grid.innerHTML = '';
-      data.opts.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'math-opt-btn';
-        btn.textContent = option;
-        btn.onclick = () => chooseQuestMathAnswer(option, btn);
-        grid.appendChild(btn);
-      });
+      const input = document.getElementById('quest-math-typed-answer');
+      input.value = '';
+      input.disabled = false;
+      input.className = 'name-input';
+      input.focus();
+
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          submitQuestMathAnswer();
+        }
+      };
 
       clearInterval(currentQuestState.mathTimerInterval);
       currentQuestState.mathTimer = 15;
@@ -2657,34 +2699,31 @@
         if (currentQuestState.mathTimer <= 0) {
           clearInterval(currentQuestState.mathTimerInterval);
           playAudioSynth('wrong');
-          highlightQuestCorrectOptionAndNext();
+          revealQuestMathTimeoutAndNext();
         }
       }, 100);
     };
 
-    const chooseQuestMathAnswer = (val, clickedBtn) => {
+    const submitQuestMathAnswer = () => {
       clearInterval(currentQuestState.mathTimerInterval);
       const idx = currentQuestState.mathIndex;
       const data = currentQuestState.mathQuestions[idx];
       const correctAns = data.ans;
       const duration = (Date.now() - currentQuestState.mathStartTime) / 1000;
 
-      document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+      const input = document.getElementById('quest-math-typed-answer');
+      const val = parseInt(input.value.trim());
+      input.disabled = true;
 
       if (val === correctAns) {
-        clickedBtn.classList.add('correct');
+        input.className = 'name-input math-input-correct';
         playAudioSynth('correct');
         currentQuestState.mathScores.push({ correct: true, speed: duration });
       } else {
-        clickedBtn.classList.add('wrong');
+        input.className = 'name-input math-input-wrong';
         playAudioSynth('wrong');
         currentQuestState.mathScores.push({ correct: false, speed: duration });
-        
-        document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => {
-          if (parseInt(btn.textContent) === correctAns) {
-            btn.classList.add('correct');
-          }
-        });
+        input.value = correctAns;
       }
 
       setTimeout(() => {
@@ -2697,18 +2736,15 @@
       }, 1500);
     };
 
-    const highlightQuestCorrectOptionAndNext = () => {
-      document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => btn.removeAttribute('onclick'));
+    const revealQuestMathTimeoutAndNext = () => {
       const idx = currentQuestState.mathIndex;
       const data = currentQuestState.mathQuestions[idx];
-      
       currentQuestState.mathScores.push({ correct: false, speed: 15 });
 
-      document.querySelectorAll('#quest-math-options-grid .math-opt-btn').forEach(btn => {
-        if (parseInt(btn.textContent) === data.ans) {
-          btn.classList.add('correct');
-        }
-      });
+      const input = document.getElementById('quest-math-typed-answer');
+      input.disabled = true;
+      input.className = 'name-input math-input-wrong';
+      input.value = data.ans;
 
       setTimeout(() => {
         currentQuestState.mathIndex++;
