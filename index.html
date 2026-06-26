@@ -1424,6 +1424,29 @@
       display: block;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
     }
+    .mode-selection-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mode-selection-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold) !important;
+      box-shadow: 0 15px 35px rgba(251, 191, 36, 0.25) !important;
+      background: rgba(30, 41, 59, 0.8) !important;
+    }
+    .spell-item-card {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+    }
+    .spell-item-card:hover {
+      transform: translateX(6px);
+      border-color: var(--gold);
+      background: rgba(251, 191, 36, 0.05);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.15);
+    }
   </style>
 </head>
 <body>
@@ -1445,6 +1468,11 @@
         <span id="gem-balance" class="wallet-count">0</span>
         <span id="robux-balance" class="wallet-robux">R$ 0</span>
       </div>
+
+      <!-- Home Button -->
+      <button id="header-home-btn" class="btn-parent" onclick="navigate('screen-home-mode')" title="Main Menu" style="margin-right: 8px; display: none;">
+        🏠
+      </button>
 
       <!-- Parent Mode Toggle -->
       <button class="btn-parent" onclick="openParentGate()" title="Parent Dashboard">
@@ -1488,6 +1516,154 @@
             Begin Wizard Journey ⚔️
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN: MAIN MENU / MODE SELECTION (HOME PAGE) -->
+  <div id="screen-home-mode" class="screen">
+    <div class="glass-card" style="max-width: 800px; margin: auto; width: 100%; text-align: center;">
+      <h2 class="title-display" style="font-size: 2.5rem; margin-bottom: 8px; text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);">Wizard Academy 🧙‍♂️</h2>
+      <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 24px;">Welcome back, <span id="home-name-span" style="color: var(--gold); font-weight: 700;">Harry</span>! Select your study path.</p>
+
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-top: 16px;">
+        <!-- Option 1: Spell Practice -->
+        <div class="mode-selection-card" onclick="openPracticeRoom()" style="flex: 1; min-width: 280px; background: rgba(30, 41, 59, 0.5); border: 2px solid rgba(251, 191, 36, 0.2); border-radius: 24px; padding: 24px; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-size: 4rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4));">🪄</div>
+            <h3 style="font-family: var(--font-display); font-size: 1.6rem; color: var(--gold); margin-bottom: 8px;">Spell Practice</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px;">
+              Select individual spell charms to train specific spelling or math skills in quick-fire challenges!
+            </p>
+          </div>
+          <button class="btn-glow" style="padding: 10px 20px; font-size: 1rem; width: 100%;">Enter Practice Room ⚔️</button>
+        </div>
+
+        <!-- Option 2: Adventure Quest -->
+        <div class="mode-selection-card" onclick="startAdventureJourney()" style="flex: 1; min-width: 280px; background: rgba(30, 41, 59, 0.5); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 24px; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-size: 4rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4));">🗺️</div>
+            <h3 style="font-family: var(--font-display); font-size: 1.6rem; color: var(--text-light); margin-bottom: 8px;">Adventure Quest</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 16px;">
+              Embark on a progressive 30-day journey where spells and equations become harder as you unlock new zones.
+            </p>
+          </div>
+          <button class="btn-glow btn-success" style="padding: 10px 20px; font-size: 1rem; width: 100%;">Resume Journey ⚔️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN: PRACTICE LIST (SPELL PRACTICE SELECTION) -->
+  <div id="screen-practice-list" class="screen">
+    <div class="glass-card" style="max-width: 800px; margin: auto; width: 100%;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <button class="btn-glow" style="padding: 6px 12px; font-size: 0.85rem;" onclick="navigate('screen-home-mode')">◀ Back</button>
+        <h2 class="title-display" style="font-size: 2rem; text-align: center; margin: 0; text-shadow: 0 0 12px rgba(251, 191, 36, 0.3);">Spell Practice Room 🪄</h2>
+        <div style="width: 70px;"></div>
+      </div>
+
+      <!-- Difficulty Selector -->
+      <div style="background: rgba(15, 23, 42, 0.4); border-radius: 16px; padding: 12px; margin-bottom: 20px; text-align: center;">
+        <span style="font-family: var(--font-display); font-size: 1.05rem; color: var(--gold); margin-right: 12px; font-weight: 700;">Select Wizard Grade:</span>
+        <select id="practice-difficulty-select" class="name-input" style="max-width: 220px; display: inline-block; padding: 6px 12px; font-size: 1rem; border-color: rgba(251, 191, 36, 0.3);" onchange="updatePracticeDifficultyLabel()">
+          <option value="1">Apprentice (Grade 1-2 Math)</option>
+          <option value="2">Journeyman (Grade 3-4 Math)</option>
+          <option value="3" selected>Sorcerer (Grade 5-6 Math)</option>
+          <option value="4">Grand Wizard (Pre-Algebra Math)</option>
+        </select>
+        <p id="difficulty-description-p" style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0 0 0;">Multipliers of 6s, 7s, 8s, 9s.</p>
+      </div>
+
+      <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <!-- Column 1: Math Spells -->
+        <div style="flex: 1; min-width: 280px;">
+          <h3 style="font-family: var(--font-display); color: var(--gold); font-size: 1.3rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🔢 Arithmancy Spells</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="spell-item-card" onclick="startPracticeSession('FactorFactory')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Numerus Multiplicatus 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Factor Factory: Build the target product!</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('MathPairs')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Equatio Conjunctio 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Math Pairs: Match formula bricks to their values.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('GridPop')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Multiplus Explosio 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Grid Pop: Blast all bubbles showing multiples.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('MissingOperator')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Operator Revelio 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Operator Revelio: Find the hidden sign in equations.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('NumberPyramid')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Pyramis Stackus 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Pyramid Stackus: Complete the magic pyramid wall.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Spelling Spells -->
+        <div style="flex: 1; min-width: 280px;">
+          <h3 style="font-family: var(--font-display); color: var(--gold); font-size: 1.3rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🔤 Grammatica Charms</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div class="spell-item-card" onclick="startPracticeSession('ListenType')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Orthographia Charm 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Orthographia: Listen and spell the spoken words.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('WordBank')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Lexicon Vocabula 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Lexicon Vocabula: Unscramble the magic sentence structure.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('TapPairs')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Glyphmatch Hex 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Glyphmatch: Link words with their corresponding emojis.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('ReadAloud')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Phonica Pronuncio 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Phonica Pronuncio: Read aloud and check pronunciation.</div>
+            </div>
+            <div class="spell-item-card" onclick="startPracticeSession('FillBlanks')">
+              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Sententia Completio 🪄</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Sententia Completio: Select missing words to fill blanks.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN: PRACTICE PLAYGROUND (GAMEPLAY) -->
+  <div id="screen-practice-playground" class="screen">
+    <div class="glass-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <button class="btn-glow" style="padding: 6px 12px; font-size: 0.85rem; background: var(--red-fail); border-color: rgba(239,68,68,0.3);" onclick="confirmAbortPractice()">Quit ✖</button>
+        <span id="practice-title" class="title-display" style="font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);">Practice Charm</span>
+        <div style="font-family: var(--font-display); font-size: 1.1rem; background: rgba(0,0,0,0.2); padding: 2px 10px; border-radius: 8px;">
+          Spell: <span id="practice-counter" style="color: var(--gold); font-weight: 700;">1/5</span>
+        </div>
+      </div>
+
+      <!-- Instruction / Target descriptor -->
+      <p id="practice-instruction" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; text-align: center;"></p>
+
+      <!-- Timer Indicator -->
+      <div class="math-timer-wrapper" id="practice-timer-container" style="display: block; margin-bottom: 16px;">
+        <div class="math-timer-bar">
+          <div id="practice-timer-fill" class="math-timer-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- Practice gameplay arena injection -->
+      <div id="practice-arena" style="min-height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+        <!-- Renders dynamically -->
+      </div>
+
+      <!-- Action Button / Proceed button -->
+      <div style="margin-top: 16px; display: flex; justify-content: center; gap: 10px;">
+        <button id="practice-next-btn" class="btn-glow btn-success" style="padding: 8px 18px; font-size: 0.9rem; display: none;" onclick="onPracticeNextClick()">
+          Proceed ▶
+        </button>
       </div>
     </div>
   </div>
@@ -2089,9 +2265,10 @@
       appState.profile.name = name;
       document.getElementById('intro-name-span').textContent = name;
       document.getElementById('success-explorer-name').textContent = name;
+      document.getElementById('home-name-span').textContent = name;
       
-      // Navigate to Summary Screen Day 0 introduction
-      navigate('screen-initiation-intro');
+      // Navigate to Home Selection Screen instead of direct initiation
+      navigate('screen-home-mode');
     };
 
     // Universal navigator between screens
@@ -2104,10 +2281,20 @@
       
       // Render wallet header pill only if user completes Day 0 or is on the map
       const wallet = document.getElementById('header-wallet');
-      if (screenId === 'screen-map' || appState.profile.unlockedDay > 0) {
+      if (screenId === 'screen-map' || screenId === 'screen-practice-list' || screenId === 'screen-practice-playground' || screenId === 'screen-quest' || appState.profile.unlockedDay > 0) {
         wallet.style.display = 'flex';
       } else {
         wallet.style.display = 'none';
+      }
+
+      // Show header home button only if not on welcome and home screen, and profile is completed
+      const homeBtn = document.getElementById('header-home-btn');
+      if (homeBtn) {
+        if (screenId !== 'screen-welcome' && screenId !== 'screen-home-mode' && appState.profile.name) {
+          homeBtn.style.display = 'inline-flex';
+        } else {
+          homeBtn.style.display = 'none';
+        }
       }
 
       if (screenId === 'screen-map') {
@@ -2791,6 +2978,38 @@
       mathStartTime: null,
       isListening: false,
       recognition: null
+    };
+
+    const currentPracticeState = {
+      isActive: false,
+      spellType: '',
+      difficulty: 3,
+      index: 0,
+      questions: [],
+      scores: [],
+      timer: 15,
+      timerInterval: null,
+      startTime: null
+    };
+
+    const getActiveSpellingQuestion = () => {
+      if (currentPracticeState.isActive) {
+        return currentPracticeState.questions[currentPracticeState.index];
+      }
+      return currentQuestState.spellingQuestions[currentQuestState.spellingQuestionIndex];
+    };
+
+    const getActiveMathQuestion = () => {
+      if (currentPracticeState.isActive) {
+        return currentPracticeState.questions[currentPracticeState.index];
+      }
+      return currentQuestState.mathQuestions[currentQuestState.mathIndex];
+    };
+
+    const revealNextButton = () => {
+      const id = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+      const btn = document.getElementById(id);
+      if (btn) btn.style.display = 'inline-flex';
     };
 
     const renderMap = () => {
@@ -3502,18 +3721,21 @@
     };
 
     const resetUnscramble = () => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       q.userSequence = [];
-      renderMiniGame(q, document.getElementById('quest-math-playground'), document.getElementById('quest-math-instruction'));
+      const playgroundId = currentPracticeState.isActive ? 'practice-arena' : 'quest-math-playground';
+      const instructionId = currentPracticeState.isActive ? 'practice-instruction' : 'quest-math-instruction';
+      renderMiniGame(q, document.getElementById(playgroundId), document.getElementById(instructionId));
     };
 
     const updateQuestReadingHighlights = () => {
+      const targetWords = currentPracticeState.isActive ? currentPracticeState.questions[currentPracticeState.index].words : currentQuestState.spellingWords;
       const idx = currentQuestState.spellingIndex;
       const stumbled = currentQuestState.stumbledIdxs || [];
-      const isComplete = idx >= currentQuestState.spellingWords.length;
+      const isComplete = idx >= targetWords.length;
 
-      currentQuestState.spellingWords.forEach((word, i) => {
+      targetWords.forEach((word, i) => {
         const el = document.getElementById(`q-read-w-${i}`);
         if (el) {
           el.className = 'reading-word';
@@ -3609,7 +3831,7 @@
       }
 
       const clean = (w) => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-      const targetWords = currentQuestState.spellingWords;
+      const targetWords = currentPracticeState.isActive ? currentPracticeState.questions[currentPracticeState.index].words : currentQuestState.spellingWords;
       const spokenWords = transcript.toLowerCase().split(/\s+/).map(clean);
 
       currentQuestState.stumbledIdxs = [];
@@ -3627,7 +3849,9 @@
         }
         if (!found) {
           currentQuestState.stumbledIdxs.push(idx);
-          saveStumbledWord(word);
+          if (!currentPracticeState.isActive) {
+            saveStumbledWord(word);
+          }
         }
       });
 
@@ -3650,7 +3874,7 @@
         playAudioSynth('wrong');
       }
 
-      document.getElementById('quest-spelling-next-btn').style.display = 'inline-flex';
+      revealNextButton();
     };
 
     // SPELLING REVIEW STAGE HANDLERS
@@ -3917,8 +4141,8 @@
 
     // INTERACTIVE MULTI-GAME ACTION HANDLERS
     const selectFactor = (element, val) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       if (element.classList.contains('selected')) {
         element.classList.remove('selected');
         q.selectedFactors = q.selectedFactors.filter(v => v !== val);
@@ -3952,8 +4176,8 @@
     };
 
     const selectPairCard = (cardIdx) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const cardEl = document.getElementById(`pair-c-${cardIdx}`);
       if (cardEl.classList.contains('matched') || cardEl.classList.contains('selected')) return;
 
@@ -3989,8 +4213,8 @@
     };
 
     const clickPopBubble = (bubbleIdx) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const bubble = q.bubbles[bubbleIdx];
       const bubbleEl = document.getElementById(`pop-b-${bubbleIdx}`);
       if (bubble.correct) {
@@ -4008,8 +4232,8 @@
     };
 
     const selectOperator = (op) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const slot = document.getElementById('missing-operator-slot');
       slot.textContent = op; slot.style.borderBottomColor = 'transparent';
       document.querySelectorAll('.operator-btn').forEach(btn => btn.disabled = true);
@@ -4024,8 +4248,8 @@
     };
 
     const submitPyramidAnswer = () => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const input = document.getElementById('pyramid-typed-answer');
       const val = parseInt(input.value.trim());
       input.disabled = true;
@@ -4039,8 +4263,8 @@
     };
 
     const clickUnscrambleTile = (tileIdx, val) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const tileEl = document.getElementById(`unscramble-t-${tileIdx}`);
       if (tileEl.classList.contains('used')) return;
       tileEl.classList.add('used');
@@ -4071,8 +4295,8 @@
     };
 
     const selectArrayExpression = (element, opt) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       document.querySelectorAll('.math-opt-btn').forEach(btn => btn.disabled = true);
       if (opt === q.ans) {
         element.classList.add('correct'); playAudioSynth('correct');
@@ -4085,8 +4309,8 @@
     };
 
     const updateNumberLineCharacter = (val) => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       document.getElementById('number-line-val-display').textContent = val;
       const range = q.max - q.min;
       const pct = ((val - q.min) / range) * 100;
@@ -4095,8 +4319,8 @@
     };
 
     const submitNumberLineValue = () => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const slider = document.getElementById('number-line-slider');
       const val = parseInt(slider.value);
       slider.disabled = true;
@@ -4111,8 +4335,8 @@
     };
 
     const submitStoryAnswer = () => {
-      const idx = currentQuestState.mathIndex;
-      const q = currentQuestState.mathQuestions[idx];
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.mathIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.mathQuestions[idx];
       const step = q.steps[q.currentStep];
       const input = document.getElementById('story-typed-answer');
       const val = parseInt(input.value.trim());
@@ -4122,7 +4346,9 @@
         setTimeout(() => {
           q.currentStep++;
           if (q.currentStep < q.steps.length) {
-            renderMiniGame(q, document.getElementById('quest-math-playground'), document.getElementById('quest-math-instruction'));
+            const playgroundId = currentPracticeState.isActive ? 'practice-arena' : 'quest-math-playground';
+            const instructionId = currentPracticeState.isActive ? 'practice-instruction' : 'quest-math-instruction';
+            renderMiniGame(q, document.getElementById(playgroundId), document.getElementById(instructionId));
           } else {
             handleMiniGameAnswer(true);
           }
@@ -4205,6 +4431,10 @@
     };
 
     const handleMiniGameAnswer = (isCorrect) => {
+      if (currentPracticeState.isActive) {
+        handlePracticeAnswer(isCorrect);
+        return;
+      }
       clearInterval(currentQuestState.mathTimerInterval);
       const idx = currentQuestState.mathIndex;
       const duration = (Date.now() - currentQuestState.mathStartTime) / 1000;
@@ -4339,6 +4569,383 @@
       };
 
       updateConfetti();
+    };
+
+    // ==========================================
+    // SPELL PRACTICE MODE (OPTION 1)
+    // ==========================================
+    const openPracticeRoom = () => {
+      navigate('screen-practice-list');
+      updatePracticeDifficultyLabel();
+    };
+
+    const updatePracticeDifficultyLabel = () => {
+      const select = document.getElementById('practice-difficulty-select');
+      const desc = document.getElementById('difficulty-description-p');
+      if (select && desc) {
+        const val = select.value;
+        if (val === '1') desc.textContent = "Apprentice: Multipliers of 2s, 3s, 4s, 5s.";
+        else if (val === '2') desc.textContent = "Journeyman: Multipliers of 4s, 5s, 6s, 7s.";
+        else if (val === '3') desc.textContent = "Sorcerer: Multipliers of 6s, 7s, 8s, 9s.";
+        else if (val === '4') desc.textContent = "Grand Wizard: Multipliers of 8s, 9s, 10s, 11s, 12s.";
+      }
+    };
+
+    const startPracticeSession = (spellType) => {
+      clearInterval(currentPracticeState.timerInterval);
+      clearInterval(currentQuestState.mathTimerInterval);
+      if (currentQuestState.recognition) {
+        try { currentQuestState.recognition.stop(); } catch(e){}
+      }
+
+      currentPracticeState.isActive = true;
+      currentPracticeState.spellType = spellType;
+      
+      const grade = parseInt(document.getElementById('practice-difficulty-select').value) || 3;
+      currentPracticeState.difficulty = grade;
+      currentPracticeState.questions = [];
+      currentPracticeState.scores = [];
+      currentPracticeState.index = 0;
+
+      const isMath = ['FactorFactory', 'MathPairs', 'GridPop', 'MissingOperator', 'NumberPyramid'].includes(spellType);
+
+      if (isMath) {
+        let day = 3;
+        if (grade === 2) day = 9;
+        if (grade === 3) day = 15;
+        if (grade === 4) day = 25;
+
+        for (let i = 0; i < 5; i++) {
+          currentPracticeState.questions.push(generateMiniGameQuestion(day, spellType));
+        }
+      } else {
+        const shuffled = [...questData.sentences].sort(() => 0.5 - Math.random());
+        const picked = shuffled.slice(0, 5);
+        picked.forEach(sentence => {
+          if (spellType === 'ReadAloud') {
+            currentPracticeState.questions.push({
+              type: 'ReadAloud',
+              sentence: sentence,
+              words: sentence.split(" ")
+            });
+          } else {
+            currentPracticeState.questions.push(generateSpellingQuestionData(15, spellType, sentence));
+          }
+        });
+      }
+
+      const firstQ = currentPracticeState.questions[0];
+      if (firstQ.words) {
+        currentQuestState.spellingWords = firstQ.words;
+      }
+
+      navigate('screen-practice-playground');
+      loadPracticeQuestion();
+    };
+
+    const loadPracticeQuestion = () => {
+      const idx = currentPracticeState.index;
+      document.getElementById('practice-counter').textContent = `${idx + 1}/5`;
+
+      const q = currentPracticeState.questions[idx];
+      const playground = document.getElementById('practice-arena');
+      playground.innerHTML = '';
+
+      const instr = document.getElementById('practice-instruction');
+      const nextBtn = document.getElementById('practice-next-btn');
+      nextBtn.style.display = 'none';
+
+      clearInterval(currentPracticeState.timerInterval);
+      
+      const isMath = ['FactorFactory', 'MathPairs', 'GridPop', 'MissingOperator', 'NumberPyramid'].includes(currentPracticeState.spellType);
+
+      const spellNames = {
+        'FactorFactory': 'Numerus Multiplicatus',
+        'MathPairs': 'Equatio Conjunctio',
+        'GridPop': 'Multiplus Explosio',
+        'MissingOperator': 'Operator Revelio',
+        'NumberPyramid': 'Pyramis Stackus',
+        'ListenType': 'Orthographia Charm',
+        'WordBank': 'Lexicon Vocabula',
+        'TapPairs': 'Glyphmatch Hex',
+        'ReadAloud': 'Phonica Pronuncio',
+        'FillBlanks': 'Sententia Completio'
+      };
+      document.getElementById('practice-title').textContent = spellNames[currentPracticeState.spellType] || 'Charm Practice';
+
+      if (q.words) {
+        currentQuestState.spellingWords = q.words;
+      }
+
+      if (isMath) {
+        document.getElementById('practice-timer-container').style.display = 'block';
+        currentPracticeState.timer = 20;
+        currentPracticeState.startTime = Date.now();
+        
+        const timerFill = document.getElementById('practice-timer-fill');
+        timerFill.style.width = '100%';
+
+        currentPracticeState.timerInterval = setInterval(() => {
+          currentPracticeState.timer -= 0.1;
+          const pct = (currentPracticeState.timer / 20) * 100;
+          timerFill.style.width = `${pct}%`;
+
+          if (currentPracticeState.timer <= 0) {
+            clearInterval(currentPracticeState.timerInterval);
+            playAudioSynth('wrong');
+            handlePracticeAnswer(false);
+          }
+        }, 100);
+
+        renderMiniGame(q, playground, instr);
+      } else {
+        document.getElementById('practice-timer-container').style.display = 'none';
+        renderSpellingQuestion(q, playground, instr);
+      }
+    };
+
+    const handlePracticeAnswer = (isCorrect) => {
+      clearInterval(currentPracticeState.timerInterval);
+      currentPracticeState.scores.push(isCorrect);
+
+      if (isCorrect) {
+        playAudioSynth('correct');
+      } else {
+        playAudioSynth('wrong');
+      }
+
+      setTimeout(() => {
+        currentPracticeState.index++;
+        if (currentPracticeState.index < 5) {
+          loadPracticeQuestion();
+        } else {
+          finishPracticeSession();
+        }
+      }, 1500);
+    };
+
+    const onPracticeNextClick = () => {
+      currentPracticeState.index++;
+      if (currentPracticeState.index < 5) {
+        loadPracticeQuestion();
+      } else {
+        finishPracticeSession();
+      }
+    };
+
+    const finishPracticeSession = () => {
+      clearInterval(currentPracticeState.timerInterval);
+      currentPracticeState.isActive = false;
+
+      triggerConfetti();
+      playAudioSynth('success');
+
+      appState.profile.gems += 5;
+      appState.profile.robux += 5;
+      document.getElementById('gem-balance').textContent = appState.profile.gems;
+      document.getElementById('robux-balance').textContent = `R$ ${appState.profile.robux}`;
+      document.getElementById('wallet-gems-modal').textContent = `${appState.profile.gems} Gems`;
+
+      alert(`🏆 Spell Practice Complete! You cast the spell beautifully and earned 5 Gems! 💎`);
+      navigate('screen-practice-list');
+    };
+
+    const confirmAbortPractice = () => {
+      if (confirm("Are you sure you want to stop practicing? Your current progress will be lost.")) {
+        clearInterval(currentPracticeState.timerInterval);
+        currentPracticeState.isActive = false;
+        navigate('screen-practice-list');
+      }
+    };
+
+    const startAdventureJourney = () => {
+      currentPracticeState.isActive = false;
+      if (appState.profile.unlockedDay === 0) {
+        navigate('screen-initiation-intro');
+      } else {
+        navigate('screen-map');
+      }
+    };
+
+    // Global spelling handlers
+    window.tapSpellingWordBankTile = (element, word, tileIdx) => {
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.spellingQuestionIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.spellingQuestions[idx];
+      if (element.classList.contains('used')) return;
+      
+      element.classList.add('used');
+      q.userSequence.push({ word: word, tileIdx: tileIdx });
+
+      const tray = document.getElementById('spelling-wordbank-tray');
+      const tile = document.createElement('div');
+      tile.className = 'tray-tile';
+      tile.textContent = word;
+      tile.onclick = () => {
+        element.classList.remove('used');
+        q.userSequence = q.userSequence.filter(x => x.tileIdx !== tileIdx);
+        tile.remove();
+      };
+      tray.appendChild(tile);
+
+      if (q.userSequence.length === q.words.length) {
+        const userWords = q.userSequence.map(x => x.word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""));
+        const targetWords = q.words.map(w => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""));
+        let correct = true;
+        for (let i = 0; i < targetWords.length; i++) {
+          if (userWords[i] !== targetWords[i]) { correct = false; break; }
+        }
+
+        if (correct) {
+          playAudioSynth('correct');
+          document.querySelectorAll('.tray-tile').forEach(el => {
+            el.style.background = 'rgba(16, 185, 129, 0.15)'; el.style.borderColor = 'var(--green-success)'; el.style.color = 'var(--green-success)';
+          });
+          const nextBtnId = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+          document.getElementById(nextBtnId).style.display = 'inline-flex';
+        } else {
+          playAudioSynth('wrong');
+          document.querySelectorAll('.tray-tile').forEach(el => {
+            el.style.background = 'rgba(239, 68, 68, 0.15)'; el.style.borderColor = 'var(--red-fail)'; el.style.color = 'var(--red-fail)'; el.style.animation = 'shake 0.4s';
+          });
+          setTimeout(() => {
+            tray.innerHTML = '';
+            document.querySelectorAll('.unscramble-tile').forEach(el => {
+              el.classList.remove('used');
+            });
+            q.userSequence = [];
+          }, 1200);
+        }
+      }
+    };
+
+    window.submitSpellingFillBlank = (btn, selected) => {
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.spellingQuestionIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.spellingQuestions[idx];
+      document.querySelectorAll('.math-opt-btn').forEach(b => b.disabled = true);
+      
+      const isCorrect = selected.toLowerCase() === q.ans.toLowerCase();
+      if (isCorrect) {
+        btn.style.background = 'rgba(16, 185, 129, 0.15)'; btn.style.borderColor = 'var(--green-success)'; btn.style.color = 'var(--green-success)';
+        playAudioSynth('correct');
+      } else {
+        btn.style.background = 'rgba(239, 68, 68, 0.15)'; btn.style.borderColor = 'var(--red-fail)'; btn.style.color = 'var(--red-fail)'; btn.style.animation = 'shake 0.4s';
+        playAudioSynth('wrong');
+        document.querySelectorAll('.math-opt-btn').forEach(b => {
+          if (b.textContent.toLowerCase() === q.ans.toLowerCase()) {
+            b.style.background = 'rgba(16, 185, 129, 0.15)'; b.style.borderColor = 'var(--green-success)'; b.style.color = 'var(--green-success)';
+          }
+        });
+      }
+      
+      const nextBtnId = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+      document.getElementById(nextBtnId).style.display = 'inline-flex';
+    };
+
+    window.submitSpellingCompleteThought = (btn, selected) => {
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.spellingQuestionIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.spellingQuestions[idx];
+      document.querySelectorAll('.math-opt-btn').forEach(b => b.disabled = true);
+      
+      if (selected === q.ans) {
+        btn.style.background = 'rgba(16, 185, 129, 0.15)'; btn.style.borderColor = 'var(--green-success)'; btn.style.color = 'var(--green-success)';
+        playAudioSynth('correct');
+      } else {
+        btn.style.background = 'rgba(239, 68, 68, 0.15)'; btn.style.borderColor = 'var(--red-fail)'; btn.style.color = 'var(--red-fail)'; btn.style.animation = 'shake 0.4s';
+        playAudioSynth('wrong');
+        document.querySelectorAll('.math-opt-btn').forEach(b => {
+          if (b.textContent === q.ans) {
+            b.style.background = 'rgba(16, 185, 129, 0.15)'; b.style.borderColor = 'var(--green-success)'; b.style.color = 'var(--green-success)';
+          }
+        });
+      }
+      const nextBtnId = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+      document.getElementById(nextBtnId).style.display = 'inline-flex';
+    };
+
+    window.submitSpellingListenType = () => {
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.spellingQuestionIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.spellingQuestions[idx];
+      const input = document.getElementById('spelling-listen-typed-input');
+      const val = input.value.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+      
+      input.disabled = true;
+      const isCorrect = val === q.ans.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+      if (isCorrect) {
+        input.className = 'name-input math-input-correct';
+        playAudioSynth('correct');
+      } else {
+        input.className = 'name-input math-input-wrong';
+        input.value = `${input.value} ➔ ${q.ans}`;
+        playAudioSynth('wrong');
+        if (!currentPracticeState.isActive) {
+          saveStumbledWord(q.ans);
+        }
+      }
+      const nextBtnId = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+      document.getElementById(nextBtnId).style.display = 'inline-flex';
+    };
+
+    window.submitSpellingAudioSelect = (btn, selected) => {
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.spellingQuestionIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.spellingQuestions[idx];
+      document.querySelectorAll('.math-opt-btn').forEach(b => b.disabled = true);
+      
+      if (selected.toLowerCase() === q.ans.toLowerCase()) {
+        btn.style.background = 'rgba(16, 185, 129, 0.15)'; btn.style.borderColor = 'var(--green-success)'; btn.style.color = 'var(--green-success)';
+        playAudioSynth('correct');
+      } else {
+        btn.style.background = 'rgba(239, 68, 68, 0.15)'; btn.style.borderColor = 'var(--red-fail)'; btn.style.color = 'var(--red-fail)'; btn.style.animation = 'shake 0.4s';
+        playAudioSynth('wrong');
+        document.querySelectorAll('.math-opt-btn').forEach(b => {
+          if (b.textContent.toLowerCase() === q.ans.toLowerCase()) {
+            b.style.background = 'rgba(16, 185, 129, 0.15)'; b.style.borderColor = 'var(--green-success)'; b.style.color = 'var(--green-success)';
+          }
+        });
+      }
+      const nextBtnId = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+      document.getElementById(nextBtnId).style.display = 'inline-flex';
+    };
+
+    window.selectSpellingPairCard = (cardIdx) => {
+      const idx = currentPracticeState.isActive ? currentPracticeState.index : currentQuestState.spellingQuestionIndex;
+      const q = currentPracticeState.isActive ? currentPracticeState.questions[idx] : currentQuestState.spellingQuestions[idx];
+      const cardEl = document.getElementById(`spelling-pair-c-${cardIdx}`);
+      if (cardEl.classList.contains('matched') || cardEl.classList.contains('selected')) return;
+
+      if (q.selectedCardIdx === null || q.selectedCardIdx === undefined) {
+        q.selectedCardIdx = cardIdx;
+        cardEl.classList.add('selected');
+      } else {
+        const prevIdx = q.selectedCardIdx;
+        const prevCard = q.cards[prevIdx];
+        const currentCard = q.cards[cardIdx];
+        cardEl.classList.add('selected');
+        
+        if (prevCard.matchId === currentCard.matchId && prevCard.side !== currentCard.side) {
+          playAudioSynth('correct');
+          document.getElementById(`spelling-pair-c-${prevIdx}`).classList.add('matched');
+          document.getElementById(`spelling-pair-c-${cardIdx}`).classList.add('matched');
+          document.getElementById(`spelling-pair-c-${prevIdx}`).classList.remove('selected');
+          document.getElementById(`spelling-pair-c-${cardIdx}`).classList.remove('selected');
+          q.selectedCardIdx = null;
+          q.matchedPairsCount++;
+          if (q.matchedPairsCount === 3) {
+            const nextBtnId = currentPracticeState.isActive ? 'practice-next-btn' : 'quest-spelling-next-btn';
+            document.getElementById(nextBtnId).style.display = 'inline-flex';
+          }
+        } else {
+          playAudioSynth('wrong');
+          const el1 = document.getElementById(`spelling-pair-c-${prevIdx}`), el2 = document.getElementById(`spelling-pair-c-${cardIdx}`);
+          el1.style.borderColor = 'var(--red-fail)'; el2.style.borderColor = 'var(--red-fail)';
+          el1.style.animation = 'shake 0.4s'; el2.style.animation = 'shake 0.4s';
+          setTimeout(() => {
+            el1.classList.remove('selected'); el2.classList.remove('selected');
+            el1.style.borderColor = 'rgba(255, 255, 255, 0.1)'; el2.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            el1.style.animation = 'none'; el2.style.animation = 'none';
+            q.selectedCardIdx = null;
+          }, 800);
+        }
+      }
     };
 
     // Window size adjustment listeners
