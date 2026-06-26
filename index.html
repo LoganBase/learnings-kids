@@ -3882,12 +3882,22 @@
       }
 
       if (currentQuestState.isListening) {
+        currentQuestState.isListening = false;
+        trigger.classList.remove('listening');
+        wave.classList.remove('active');
         info.textContent = 'Processing speech...';
         if (currentQuestState.recognition) {
-          currentQuestState.recognition.stop();
+          try {
+            currentQuestState.recognition.onend = null; // prevent duplicate callback on manual stop
+            currentQuestState.recognition.stop();
+          } catch(e) {
+            console.error(e);
+          }
         }
+        processFinalQuestSpokenText(currentQuestState.lastTranscript || '');
       } else {
         currentQuestState.isListening = true;
+        currentQuestState.lastTranscript = '';
         trigger.classList.add('listening');
         wave.classList.add('active');
         info.textContent = 'Listening... Read the whole sentence, then click mic to finish!';
@@ -3911,6 +3921,7 @@
             }
             const liveText = (fullTranscript + interimTranscript).trim();
             info.innerHTML = `<em>Hearing: "${liveText}"</em>`;
+            currentQuestState.lastTranscript = liveText;
           };
 
           currentQuestState.recognition.onerror = (err) => {
@@ -3923,7 +3934,7 @@
               currentQuestState.isListening = false;
               trigger.classList.remove('listening');
               wave.classList.remove('active');
-              processFinalQuestSpokenText(fullTranscript.trim());
+              processFinalQuestSpokenText(currentQuestState.lastTranscript || '');
             }
           };
 
