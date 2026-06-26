@@ -1429,8 +1429,36 @@
           </div>
         </div>
         <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
-          <button id="quest-spelling-next-btn" class="btn-glow btn-success" style="padding: 8px 16px; font-size: 0.85rem; display: none;" onclick="startQuestMathSprint()">
-            Proceed to Math Sprint ▶
+          <button id="quest-spelling-next-btn" class="btn-glow btn-success" style="padding: 8px 16px; font-size: 0.85rem; display: none;" onclick="handleSpellingNext()">
+            Proceed ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- Spelling Review Phase UI (starts hidden) -->
+      <div id="quest-spelling-review-phase" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="color: var(--gold); margin: 0; font-family: var(--font-display);">Spelling Review Test 🪄</h3>
+          <div style="font-family: var(--font-display); font-size: 1.1rem; background: rgba(0,0,0,0.2); padding: 2px 10px; border-radius: 8px;">
+            Word: <span id="review-spelling-counter" style="color: var(--gold); font-weight: 700;">1/3</span>
+          </div>
+        </div>
+        
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Listen to the magic word and type its correct spelling!</p>
+
+        <div style="background: rgba(15, 23, 42, 0.4); border-radius: 20px; padding: 24px; text-align: center; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 16px;">
+          <button class="btn-glow" style="padding: 12px 24px; font-size: 1.1rem; margin-bottom: 16px; background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);" onclick="pronounceReviewWord()">
+            🔊 Listen to Word
+          </button>
+          
+          <div style="max-width: 280px; margin: 0 auto;">
+            <input id="review-spelling-input" type="text" class="name-input" style="font-size: 1.4rem; text-align: center; padding: 10px;" placeholder="Type spelling here..." autocomplete="off" autocapitalize="off" spellcheck="false">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 12px;">
+          <button class="btn-glow btn-success" style="padding: 10px 24px; font-size: 0.95rem;" onclick="submitReviewSpelling()">
+            Cast Spell ⚡
           </button>
         </div>
       </div>
@@ -1842,6 +1870,28 @@
       });
     };
 
+    // Database for storing stumbled spelling words
+    const saveStumbledWord = (word) => {
+      const cleanW = word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+      if (!cleanW || cleanW.length <= 2) return; // ignore short helper words like "a", "an", "to"
+      let list = JSON.parse(localStorage.getItem('stumbledSpellingWords') || '[]');
+      if (!list.includes(cleanW)) {
+        list.push(cleanW);
+        localStorage.setItem('stumbledSpellingWords', JSON.stringify(list));
+      }
+    };
+
+    const getStumbledWords = () => {
+      return JSON.parse(localStorage.getItem('stumbledSpellingWords') || '[]');
+    };
+
+    const removeStumbledWord = (word) => {
+      const cleanW = word.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+      let list = JSON.parse(localStorage.getItem('stumbledSpellingWords') || '[]');
+      list = list.filter(w => w !== cleanW);
+      localStorage.setItem('stumbledSpellingWords', JSON.stringify(list));
+    };
+
     // Speech recognition object creation & hooks
     const toggleSpeechListening = () => {
       const trigger = document.getElementById('mic-trigger');
@@ -1851,23 +1901,21 @@
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
       if (!SpeechRecognition) {
-        info.innerHTML = "❌ Browser Speech Recognition not supported in this frame.<br>Click 'Simulate Voice Read' below!";
+        info.innerHTML = "❌ Browser Speech Recognition not supported in this frame.<br>Please try in a compatible browser.";
         return;
       }
 
       if (isSpeechListening) {
-        // Stop listening
         isSpeechListening = false;
         trigger.classList.remove('listening');
         wave.classList.remove('active');
-        info.textContent = 'Speech Stopped. Click mic to try again.';
+        info.textContent = 'Processing speech...';
         if (speechRecognitionObj) speechRecognitionObj.stop();
       } else {
-        // Start listening
         isSpeechListening = true;
         trigger.classList.add('listening');
         wave.classList.add('active');
-        info.textContent = 'Listening to reading... Speak clearly!';
+        info.textContent = 'Listening... Read the whole sentence, then click mic to finish!';
         
         try {
           speechRecognitionObj = new SpeechRecognition();
@@ -1875,18 +1923,33 @@
           speechRecognitionObj.interimResults = true;
           speechRecognitionObj.lang = 'en-US';
 
+          let fullTranscript = '';
+
           speechRecognitionObj.onresult = (event) => {
-            const results = event.results;
-            const latestResultIdx = event.resultIndex;
-            const isFinal = results[latestResultIdx].isFinal;
-            const transcript = results[latestResultIdx][0].transcript.trim().toLowerCase();
-            
-            processSpokenText(transcript, isFinal);
+            let interimTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              if (event.results[i].isFinal) {
+                fullTranscript += event.results[i][0].transcript + ' ';
+              } else {
+                interimTranscript += event.results[i][0].transcript;
+              }
+            }
+            const liveText = (fullTranscript + interimTranscript).trim();
+            info.innerHTML = `<em>Hearing: "${liveText}"</em>`;
           };
 
           speechRecognitionObj.onerror = (err) => {
             console.error('Speech recognition error', err);
-            info.innerHTML = "⚠️ Mic Access Error/Blocked.<br>Please use the 'Simulate Voice Read' fallback.";
+            info.innerHTML = "⚠️ Mic Access Error/Blocked. Please click again to retry.";
+          };
+
+          speechRecognitionObj.onend = () => {
+            if (isSpeechListening) {
+              isSpeechListening = false;
+              trigger.classList.remove('listening');
+              wave.classList.remove('active');
+              processFinalSpokenText(fullTranscript.trim());
+            }
           };
 
           speechRecognitionObj.start();
@@ -1896,58 +1959,57 @@
       }
     };
 
-    const processSpokenText = (transcript, isFinal) => {
-      const idx = appState.initiation.currentReadIdx;
-      if (idx >= appState.initiation.readingWords.length) return;
+    const processFinalSpokenText = (transcript) => {
+      const info = document.getElementById('speech-info');
+      if (!transcript) {
+        info.textContent = '⚠️ We didn\'t hear anything. Click the mic to try again!';
+        return;
+      }
 
-      const targetWord = appState.initiation.readingWords[idx]
-        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
-        .toLowerCase();
+      const clean = (w) => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+      const targetWords = appState.initiation.readingWords;
+      const spokenWords = transcript.toLowerCase().split(/\s+/).map(clean);
 
-      // Check if spoken phrase contains target word
-      if (transcript.includes(targetWord)) {
-        playAudioSynth('correct');
-        appState.initiation.currentReadIdx++;
-        appState.initiation.wordAttempts = 0;
-        checkInitiationReadingCompletion();
-      } else if (isFinal) {
-        appState.initiation.wordAttempts = (appState.initiation.wordAttempts || 0) + 1;
-        
-        if (appState.initiation.wordAttempts >= 3) {
-          if (!appState.initiation.stumbledIdxs) appState.initiation.stumbledIdxs = [];
+      appState.initiation.stumbledIdxs = [];
+      let lastFoundIdx = -1;
+
+      targetWords.forEach((word, idx) => {
+        const cleanedTarget = clean(word);
+        let found = false;
+        for (let i = lastFoundIdx + 1; i < spokenWords.length; i++) {
+          if (spokenWords[i] === cleanedTarget || spokenWords[i].includes(cleanedTarget) || cleanedTarget.includes(spokenWords[i])) {
+            lastFoundIdx = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
           appState.initiation.stumbledIdxs.push(idx);
-          
-          playAudioSynth('wrong');
-          appState.initiation.currentReadIdx++;
-          appState.initiation.wordAttempts = 0;
-          checkInitiationReadingCompletion();
-        } else {
-          playAudioSynth('wrong');
-          document.getElementById('speech-info').textContent = `Keep trying! Attempt ${appState.initiation.wordAttempts}/3 for "${targetWord}"`;
+          saveStumbledWord(word);
         }
-      }
-    };
+      });
 
-    const checkInitiationReadingCompletion = () => {
+      appState.initiation.currentReadIdx = targetWords.length;
       updateReadingHighlights();
-      if (appState.initiation.currentReadIdx >= appState.initiation.readingWords.length) {
-        isSpeechListening = false;
-        document.getElementById('mic-trigger').classList.remove('listening');
-        document.getElementById('speech-wave-anim').classList.remove('active');
-        
-        const stumbledCount = (appState.initiation.stumbledIdxs || []).length;
-        if (stumbledCount > 0) {
-          document.getElementById('speech-info').innerHTML = `✅ Complete! Tap any <span style="color:var(--red-fail);font-weight:700;">red word</span> to hear its correct magic pronunciation!`;
-        } else {
-          document.getElementById('speech-info').textContent = '✅ Read complete! Proceed to Math.';
-        }
-        
-        document.getElementById('reading-next-btn').style.display = 'inline-flex';
+
+      const correctCount = targetWords.length - appState.initiation.stumbledIdxs.length;
+      const scorePct = Math.round((correctCount / targetWords.length) * 100);
+
+      document.getElementById('parent-reading-metric').textContent = `${scorePct}%`;
+      document.getElementById('sum-reading').textContent = `${scorePct}%`;
+
+      if (scorePct === 100) {
+        info.innerHTML = `<span style="color:var(--green-success);font-weight:700;">✨ Perfect Read! 100% Correct!</span>`;
         playAudioSynth('success');
-        if (speechRecognitionObj) speechRecognitionObj.stop();
-        
-        updateReadingHighlights();
+      } else {
+        info.innerHTML = `
+          <span>Read Complete: <strong>${correctCount}/${targetWords.length}</strong> correct.</span><br>
+          <span style="font-size:0.85rem;color:var(--text-muted);">Tap any <span style="color:var(--red-fail);font-weight:700;">red word</span> to hear correct pronunciation.</span>
+        `;
+        playAudioSynth('wrong');
       }
+
+      document.getElementById('reading-next-btn').style.display = 'inline-flex';
     };
 
 
@@ -2486,6 +2548,15 @@
       currentQuestState.mathScores = [];
       currentQuestState.isListening = false;
 
+      // Extract spelling review words from database
+      currentQuestState.spellingReviewList = [];
+      const stumbledList = getStumbledWords();
+      if (stumbledList.length > 0) {
+        const shuffled = stumbledList.sort(() => 0.5 - Math.random());
+        currentQuestState.spellingReviewList = shuffled.slice(0, Math.min(3, shuffled.length));
+      }
+      currentQuestState.spellingReviewIdx = 0;
+
       const sentence = questData.sentences[day];
       currentQuestState.spellingWords = sentence.split(" ");
 
@@ -2503,6 +2574,7 @@
       document.getElementById('quest-phase-badge').textContent = `Phase 1: Phonics`;
       document.getElementById('quest-spelling-phase').style.display = 'block';
       document.getElementById('quest-math-phase').style.display = 'none';
+      document.getElementById('quest-spelling-review-phase').style.display = 'none';
       document.getElementById('quest-spelling-next-btn').style.display = 'none';
       
       const container = document.getElementById('quest-paragraph-container');
@@ -2554,7 +2626,7 @@
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
       if (!SpeechRecognition) {
-        info.innerHTML = "❌ Speech Recognition not supported in this frame.<br>Click 'Simulate Voice Read' below!";
+        info.innerHTML = "❌ Speech Recognition not supported in this frame.<br>Please try in a compatible browser.";
         return;
       }
 
@@ -2562,13 +2634,13 @@
         currentQuestState.isListening = false;
         trigger.classList.remove('listening');
         wave.classList.remove('active');
-        info.textContent = 'Speech Stopped. Click mic to start.';
+        info.textContent = 'Processing speech...';
         if (currentQuestState.recognition) currentQuestState.recognition.stop();
       } else {
         currentQuestState.isListening = true;
         trigger.classList.add('listening');
         wave.classList.add('active');
-        info.textContent = 'Listening... Speak clearly!';
+        info.textContent = 'Listening... Read the whole sentence, then click mic to finish!';
         
         try {
           currentQuestState.recognition = new SpeechRecognition();
@@ -2576,16 +2648,33 @@
           currentQuestState.recognition.interimResults = true;
           currentQuestState.recognition.lang = 'en-US';
 
+          let fullTranscript = '';
+
           currentQuestState.recognition.onresult = (event) => {
-            const latestResultIdx = event.resultIndex;
-            const isFinal = event.results[latestResultIdx].isFinal;
-            const transcript = event.results[latestResultIdx][0].transcript.trim().toLowerCase();
-            processQuestSpokenText(transcript, isFinal);
+            let interimTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+              if (event.results[i].isFinal) {
+                fullTranscript += event.results[i][0].transcript + ' ';
+              } else {
+                interimTranscript += event.results[i][0].transcript;
+              }
+            }
+            const liveText = (fullTranscript + interimTranscript).trim();
+            info.innerHTML = `<em>Hearing: "${liveText}"</em>`;
           };
 
           currentQuestState.recognition.onerror = (err) => {
             console.error('Speech error', err);
-            info.innerHTML = "⚠️ Mic Access Error.<br>Please use the 'Simulate Voice Read' fallback.";
+            info.innerHTML = "⚠️ Mic Access Error. Please click again to retry.";
+          };
+
+          currentQuestState.recognition.onend = () => {
+            if (currentQuestState.isListening) {
+              currentQuestState.isListening = false;
+              trigger.classList.remove('listening');
+              wave.classList.remove('active');
+              processFinalQuestSpokenText(fullTranscript.trim());
+            }
           };
 
           currentQuestState.recognition.start();
@@ -2595,56 +2684,131 @@
       }
     };
 
-    const processQuestSpokenText = (transcript, isFinal) => {
-      const idx = currentQuestState.spellingIndex;
-      if (idx >= currentQuestState.spellingWords.length) return;
+    const processFinalQuestSpokenText = (transcript) => {
+      const info = document.getElementById('quest-speech-info');
+      if (!transcript) {
+        info.textContent = '⚠️ We didn\'t hear anything. Click the mic to try again!';
+        return;
+      }
 
-      const targetWord = currentQuestState.spellingWords[idx]
-        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
-        .toLowerCase();
+      const clean = (w) => w.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+      const targetWords = currentQuestState.spellingWords;
+      const spokenWords = transcript.toLowerCase().split(/\s+/).map(clean);
 
-      if (transcript.includes(targetWord)) {
-        playAudioSynth('correct');
-        currentQuestState.spellingIndex++;
-        currentQuestState.wordAttempts = 0;
-        checkQuestReadingCompletion();
-      } else if (isFinal) {
-        currentQuestState.wordAttempts = (currentQuestState.wordAttempts || 0) + 1;
-        
-        if (currentQuestState.wordAttempts >= 3) {
-          if (!currentQuestState.stumbledIdxs) currentQuestState.stumbledIdxs = [];
-          currentQuestState.stumbledIdxs.push(idx);
-          
-          playAudioSynth('wrong');
-          currentQuestState.spellingIndex++;
-          currentQuestState.wordAttempts = 0;
-          checkQuestReadingCompletion();
-        } else {
-          playAudioSynth('wrong');
-          document.getElementById('quest-speech-info').textContent = `Keep trying! Attempt ${currentQuestState.wordAttempts}/3 for "${targetWord}"`;
+      currentQuestState.stumbledIdxs = [];
+      let lastFoundIdx = -1;
+
+      targetWords.forEach((word, idx) => {
+        const cleanedTarget = clean(word);
+        let found = false;
+        for (let i = lastFoundIdx + 1; i < spokenWords.length; i++) {
+          if (spokenWords[i] === cleanedTarget || spokenWords[i].includes(cleanedTarget) || cleanedTarget.includes(spokenWords[i])) {
+            lastFoundIdx = i;
+            found = true;
+            break;
+          }
         }
+        if (!found) {
+          currentQuestState.stumbledIdxs.push(idx);
+          saveStumbledWord(word);
+        }
+      });
+
+      currentQuestState.spellingIndex = targetWords.length;
+      updateQuestReadingHighlights();
+
+      const correctCount = targetWords.length - currentQuestState.stumbledIdxs.length;
+      const scorePct = Math.round((correctCount / targetWords.length) * 100);
+
+      currentQuestState.spellingAccuracy = scorePct;
+
+      if (scorePct === 100) {
+        info.innerHTML = `<span style="color:var(--green-success);font-weight:700;">✨ Perfect Read! 100% Correct!</span>`;
+        playAudioSynth('success');
+      } else {
+        info.innerHTML = `
+          <span>Read Complete: <strong>${correctCount}/${targetWords.length}</strong> correct.</span><br>
+          <span style="font-size:0.85rem;color:var(--text-muted);">Tap <span style="color:var(--red-fail);font-weight:700;">red words</span> for wizard pronunciation.</span>
+        `;
+        playAudioSynth('wrong');
+      }
+
+      document.getElementById('quest-spelling-next-btn').style.display = 'inline-flex';
+    };
+
+    // SPELLING REVIEW STAGE HANDLERS
+    const pronounceReviewWord = () => {
+      const idx = currentQuestState.spellingReviewIdx;
+      const word = currentQuestState.spellingReviewList[idx];
+      if (word) {
+        speakWord(word);
       }
     };
 
-    const checkQuestReadingCompletion = () => {
-      updateQuestReadingHighlights();
-      if (currentQuestState.spellingIndex >= currentQuestState.spellingWords.length) {
-        currentQuestState.isListening = false;
-        document.getElementById('quest-mic-trigger').classList.remove('listening');
-        document.getElementById('quest-speech-wave-anim').classList.remove('active');
-        
-        const stumbledCount = (currentQuestState.stumbledIdxs || []).length;
-        if (stumbledCount > 0) {
-          document.getElementById('quest-speech-info').innerHTML = `✅ Complete! Tap any <span style="color:var(--red-fail);font-weight:700;">red word</span> to hear its correct magic pronunciation!`;
-        } else {
-          document.getElementById('quest-speech-info').textContent = '✅ Read complete! Proceed to Math.';
+    const startSpellingReviewPhase = () => {
+      document.getElementById('quest-phase-badge').textContent = `Phase 1.5: Spelling Review`;
+      document.getElementById('quest-spelling-phase').style.display = 'none';
+      document.getElementById('quest-math-phase').style.display = 'none';
+      document.getElementById('quest-spelling-review-phase').style.display = 'block';
+      loadReviewSpellingWord();
+    };
+
+    const loadReviewSpellingWord = () => {
+      const idx = currentQuestState.spellingReviewIdx;
+      const count = currentQuestState.spellingReviewList.length;
+      document.getElementById('review-spelling-counter').textContent = `${idx + 1}/${count}`;
+      
+      const input = document.getElementById('review-spelling-input');
+      input.value = '';
+      input.disabled = false;
+      input.className = 'name-input';
+      input.focus();
+
+      input.onkeydown = (e) => {
+        if (e.key === 'Enter') {
+          submitReviewSpelling();
         }
-        
-        document.getElementById('quest-spelling-next-btn').style.display = 'inline-flex';
-        playAudioSynth('success');
-        if (currentQuestState.recognition) currentQuestState.recognition.stop();
-        
-        updateQuestReadingHighlights();
+      };
+
+      setTimeout(() => {
+        pronounceReviewWord();
+      }, 300);
+    };
+
+    const submitReviewSpelling = () => {
+      const idx = currentQuestState.spellingReviewIdx;
+      const targetWord = currentQuestState.spellingReviewList[idx].toLowerCase().trim();
+      
+      const input = document.getElementById('review-spelling-input');
+      const val = input.value.toLowerCase().trim();
+      input.disabled = true;
+
+      if (val === targetWord) {
+        input.className = 'name-input math-input-correct';
+        playAudioSynth('correct');
+        removeStumbledWord(targetWord);
+      } else {
+        input.className = 'name-input math-input-wrong';
+        playAudioSynth('wrong');
+        input.value = `${val} ➔ ${targetWord}`;
+      }
+
+      setTimeout(() => {
+        currentQuestState.spellingReviewIdx++;
+        if (currentQuestState.spellingReviewIdx < currentQuestState.spellingReviewList.length) {
+          loadReviewSpellingWord();
+        } else {
+          document.getElementById('quest-spelling-review-phase').style.display = 'none';
+          startQuestMathSprint();
+        }
+      }, 2000);
+    };
+
+    const handleSpellingNext = () => {
+      if (currentQuestState.spellingReviewList && currentQuestState.spellingReviewList.length > 0) {
+        startSpellingReviewPhase();
+      } else {
+        startQuestMathSprint();
       }
     };
 
