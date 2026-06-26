@@ -1085,6 +1085,306 @@
       pointer-events: none;
       z-index: 9999;
     }
+
+    /* Factor Factory grid bubbles */
+    .factor-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+      width: 100%;
+      max-width: 360px;
+    }
+    .factor-bubble {
+      background: rgba(30, 41, 59, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      width: 76px; height: 76px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      margin: 0 auto;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .factor-bubble:hover {
+      transform: scale(1.08);
+      border-color: var(--gold);
+    }
+    .factor-bubble.selected {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: var(--gold);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+      transform: scale(1.05);
+    }
+
+    /* Math Pairs card grid */
+    .pairs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      max-width: 420px;
+      margin-top: 12px;
+    }
+    .pair-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 12px 6px;
+      min-height: 70px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    }
+    .pair-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .pair-card.selected {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: #3b82f6;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+    .pair-card.matched {
+      opacity: 0.2;
+      pointer-events: none;
+      border-color: transparent;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* Grid Pop bubble elements */
+    .grid-pop-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 14px;
+    }
+    .pop-bubble {
+      background: radial-gradient(circle at 30% 30%, #3b82f6 0%, #1d4ed8 100%);
+      border-radius: 50%;
+      width: 70px; height: 70px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.4rem; font-weight: 700;
+      color: white;
+      cursor: pointer;
+      margin: 0 auto;
+      transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.35);
+      user-select: none;
+    }
+    .pop-bubble:hover {
+      transform: scale(1.08);
+    }
+    .pop-bubble.popped {
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Operator Choice dock */
+    .operator-dock {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 16px;
+      width: 100%;
+    }
+    .operator-btn {
+      background: rgba(30, 41, 59, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      width: 64px; height: 64px;
+      font-family: var(--font-display);
+      font-size: 1.8rem; font-weight: 700;
+      color: var(--gold);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .operator-btn:hover {
+      transform: translateY(-3px);
+      background: rgba(30, 41, 59, 0.8);
+      border-color: var(--gold);
+      box-shadow: 0 6px 15px rgba(251, 191, 36, 0.3);
+    }
+
+    /* Stackable Pyramid Bricks */
+    .pyramid-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .pyramid-row {
+      display: flex;
+      gap: 6px;
+    }
+    .pyramid-brick {
+      background: linear-gradient(135deg, #4b5563 0%, #1f2937 100%);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      width: 110px; height: 50px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.25rem; font-weight: 700;
+      color: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .pyramid-brick.top-brick {
+      background: linear-gradient(135deg, #d97706 0%, #92400e 100%);
+      border-color: var(--gold);
+    }
+
+    /* Unscramble Tiles */
+    .unscramble-pool {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 16px;
+      min-height: 54px;
+    }
+    .unscramble-tile {
+      background: rgba(30, 41, 59, 0.6);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-family: var(--font-display);
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.25);
+      transition: all 0.2s;
+    }
+    .unscramble-tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+    .unscramble-tile.used {
+      opacity: 0.3;
+      pointer-events: none;
+      transform: scale(0.9);
+    }
+    .unscramble-tray {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 16px;
+      min-height: 58px;
+      width: 100%;
+      border-bottom: 2px dashed rgba(255,255,255,0.15);
+      padding-bottom: 8px;
+    }
+    .tray-tile {
+      background: rgba(251, 191, 36, 0.1);
+      border: 2.5px solid var(--gold);
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-family: var(--font-display);
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--gold);
+      cursor: pointer;
+      animation: numPop 0.2s forwards;
+    }
+
+    /* Visual Apple Array spacing */
+    .array-matching-box {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
+      padding: 16px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    .visual-array-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .array-item-emoji {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    /* Number Line Slider */
+    .number-line-container {
+      width: 100%;
+      max-width: 440px;
+      margin: 12px 0 20px;
+      position: relative;
+    }
+    .number-line-ruler {
+      height: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 3px;
+      width: 100%;
+      position: relative;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .number-line-tick {
+      width: 2px; height: 10px;
+      background: rgba(255,255,255,0.3);
+      position: relative;
+      top: -2px;
+    }
+    .number-line-tick::after {
+      content: attr(data-val);
+      position: absolute;
+      top: 14px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .number-line-character {
+      position: absolute;
+      font-size: 1.8rem;
+      top: -34px;
+      transition: left 0.15s ease-out;
+      transform: translateX(-50%);
+    }
+
+    /* Boss battle elements */
+    .boss-header {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+      border: 2px solid rgba(239, 68, 68, 0.25);
+      border-radius: 20px;
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; margin-bottom: 12px;
+    }
+    .boss-hp-bar {
+      flex: 1;
+      height: 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 7px;
+      overflow: hidden;
+      margin: 0 16px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .boss-hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ef4444, #f87171);
+      width: 100%;
+      transition: width 0.3s ease-out;
+    }
   </style>
 </head>
 <body>
@@ -1466,7 +1766,7 @@
       <!-- Math Phase UI (starts hidden) -->
       <div id="quest-math-phase" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-          <span style="color: var(--text-muted); font-size: 0.9rem;">Solve the multiplication puzzle!</span>
+          <span id="quest-math-instruction" style="color: var(--text-muted); font-size: 0.90rem;">Solve the multiplication puzzle!</span>
           <div style="font-family: var(--font-display); font-size: 1.1rem; background: rgba(0,0,0,0.2); padding: 2px 10px; border-radius: 8px;">
             Question: <span id="quest-math-counter" style="color: var(--gold); font-weight: 700;">1/5</span>
           </div>
@@ -1476,15 +1776,9 @@
           <div id="quest-math-timer-fill" class="timer-fill"></div>
         </div>
 
-        <div class="glass-card" style="background: rgba(15, 23, 42, 0.4); margin-bottom: 12px; border-color: rgba(255,255,255,0.05); padding: 16px;">
-          <div id="quest-math-problem-box" class="math-problem">
-            <!-- Dynamic math problem -->
-          </div>
-        </div>
-
-        <div class="math-input-container" style="display: flex; gap: 12px; max-width: 320px; margin: 12px auto 0; justify-content: center; align-items: center; width: 100%;">
-          <input id="quest-math-typed-answer" type="number" pattern="[0-9]*" inputmode="numeric" class="name-input" style="font-size: 1.8rem; font-family: var(--font-display); width: 140px; padding: 10px;" placeholder="?" autofocus>
-          <button class="btn-glow btn-success" style="padding: 12px 24px; font-size: 1rem; border-radius: 16px;" onclick="submitQuestMathAnswer()">Cast ⚡</button>
+        <!-- Dynamic Playground for Math Mini-Games -->
+        <div id="quest-math-playground" style="min-height: 280px; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+          <!-- Mini-game HTML will be injected here -->
         </div>
       </div>
       
@@ -2560,14 +2854,70 @@
       const sentence = questData.sentences[day];
       currentQuestState.spellingWords = sentence.split(" ");
 
+      const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+      // Check if it's a boss battle day (Quest 5, 10, 15, 20, 25, 30)
+      const isBoss = day > 0 && day % 5 === 0;
+      currentQuestState.isBossBattle = isBoss;
+
       currentQuestState.mathQuestions = [];
-      for (let i = 0; i < 5; i++) {
-        const factors = generateMathFactors(day);
-        currentQuestState.mathQuestions.push({
-          num1: factors.num1,
-          num2: factors.num2,
-          ans: factors.num1 * factors.num2
-        });
+      if (isBoss) {
+        // Generate mixed operations questions
+        const ops = ['+', '-', '×'];
+        if (day > 10) ops.push('÷');
+        
+        for (let i = 0; i < 10; i++) {
+          const chosenOp = ops[Math.floor(Math.random() * ops.length)];
+          let num1, num2, ans;
+          const diffFactor = Math.floor(day / 5) + Math.floor(i / 3);
+          
+          if (chosenOp === '+') {
+            num1 = rand(10 + diffFactor * 5, 40 + diffFactor * 10);
+            num2 = rand(10 + diffFactor * 5, 40 + diffFactor * 10);
+            ans = num1 + num2;
+          } else if (chosenOp === '-') {
+            num1 = rand(30 + diffFactor * 10, 99 + diffFactor * 5);
+            num2 = rand(10 + diffFactor * 5, num1 - 10);
+            ans = num1 - num2;
+          } else if (chosenOp === '×') {
+            num1 = rand(2 + Math.floor(diffFactor / 2), 6 + Math.floor(diffFactor / 2));
+            num2 = rand(2, 9 + Math.floor(diffFactor / 3));
+            ans = num1 * num2;
+          } else { // ÷
+            num2 = rand(2, 8 + Math.floor(diffFactor / 3));
+            ans = rand(2 + Math.floor(diffFactor / 2), 7 + Math.floor(diffFactor / 2));
+            num1 = num2 * ans;
+          }
+          
+          currentQuestState.mathQuestions.push({
+            type: 'BossBattle',
+            num1: num1,
+            num2: num2,
+            op: chosenOp,
+            ans: ans,
+            bossHP: 100,
+            multiplier: 1
+          });
+        }
+      } else {
+        // Regular quest: pick random mini-game types for the 5 questions!
+        const gameTypes = [
+          'FactorFactory',
+          'MathPairs',
+          'GridPop',
+          'MissingOperator',
+          'NumberPyramid',
+          'EquationUnscramble',
+          'ArrayMatching',
+          'NumberLine',
+          'MathStories'
+        ];
+        
+        for (let i = 0; i < 5; i++) {
+          const gameType = gameTypes[Math.floor(Math.random() * gameTypes.length)];
+          const qData = generateMiniGameQuestion(day, gameType);
+          currentQuestState.mathQuestions.push(qData);
+        }
       }
 
       document.getElementById('quest-title').textContent = `Quest ${day}: ${questData.names[day]}`;
@@ -2821,78 +3171,442 @@
       loadQuestMathQuestion();
     };
 
+    // GENERATOR FOR 9 MATH MINI-GAMES
+    const generateMiniGameQuestion = (day, gameType) => {
+      let minVal = 2, maxVal = 5;
+      if (day > 5) { minVal = 4; maxVal = 7; }
+      if (day > 10) { minVal = 6; maxVal = 9; }
+      if (day > 20) { minVal = 8; maxVal = 12; }
+
+      const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+      switch(gameType) {
+        case 'FactorFactory': {
+          const num1 = rand(minVal, maxVal);
+          const num2 = rand(2, 12);
+          const target = num1 * num2;
+          const pool = new Set([num1, num2]);
+          while (pool.size < 6) { pool.add(rand(2, 15)); }
+          const options = Array.from(pool).sort(() => 0.5 - Math.random());
+          return { type: 'FactorFactory', target: target, options: options, factor1: num1, factor2: num2 };
+        }
+        case 'MathPairs': {
+          const pairs = [];
+          for (let i = 0; i < 3; i++) {
+            const num1 = rand(minVal, maxVal);
+            const num2 = rand(2, 10);
+            pairs.push({ formula: `${num1} × ${num2}`, ans: num1 * num2 });
+          }
+          let cards = [];
+          pairs.forEach((p, idx) => {
+            cards.push({ id: `f-${idx}`, text: p.formula, matchId: idx });
+            cards.push({ id: `a-${idx}`, text: p.ans.toString(), matchId: idx });
+          });
+          cards = cards.sort(() => 0.5 - Math.random());
+          return { type: 'MathPairs', cards: cards };
+        }
+        case 'GridPop': {
+          const divisor = rand(minVal, maxVal);
+          const correctMultiples = [];
+          while (correctMultiples.length < 5) {
+            const f = rand(1, 12);
+            if (!correctMultiples.includes(divisor * f)) correctMultiples.push(divisor * f);
+          }
+          const traps = [];
+          while (traps.length < 3) {
+            const val = rand(divisor, divisor * 12 + 5);
+            if (val % divisor !== 0 && !traps.includes(val)) traps.push(val);
+          }
+          const bubbles = [...correctMultiples.map(v => ({ val: v, correct: true })), ...traps.map(v => ({ val: v, correct: false }))];
+          return { type: 'GridPop', divisor: divisor, bubbles: bubbles.sort(() => 0.5 - Math.random()), neededToWin: 5 };
+        }
+        case 'MissingOperator': {
+          const ops = ['+', '-', '×'];
+          if (day > 5) ops.push('÷');
+          const chosenOp = ops[Math.floor(Math.random() * ops.length)];
+          let num1, num2, ans;
+          if (chosenOp === '+') {
+            num1 = rand(5, 50); num2 = rand(5, 50); ans = num1 + num2;
+          } else if (chosenOp === '-') {
+            num1 = rand(20, 99); num2 = rand(5, num1 - 5); ans = num1 - num2;
+          } else if (chosenOp === '×') {
+            num1 = rand(minVal, maxVal); num2 = rand(2, 10); ans = num1 * num2;
+          } else {
+            num2 = rand(2, 10); ans = rand(minVal, maxVal); num1 = num2 * ans;
+          }
+          return { type: 'MissingOperator', num1: num1, num2: num2, ans: ans, correctOp: chosenOp };
+        }
+        case 'NumberPyramid': {
+          const op = Math.random() > 0.4 ? '×' : '+';
+          const left = rand(minVal, maxVal + 2);
+          const right = rand(2, 10);
+          const top = op === '×' ? left * right : left + right;
+          const missingIdx = Math.floor(Math.random() * 3);
+          return { type: 'NumberPyramid', top: top, left: left, right: right, op: op, missingIdx: missingIdx, ans: missingIdx === 0 ? top : (missingIdx === 1 ? left : right) };
+        }
+        case 'EquationUnscramble': {
+          const num1 = rand(minVal, maxVal);
+          const num2 = rand(2, 10);
+          const sequence = [num1.toString(), '×', num2.toString(), '=', (num1 * num2).toString()];
+          return { type: 'EquationUnscramble', sequence: sequence, pool: [...sequence].sort(() => 0.5 - Math.random()) };
+        }
+        case 'ArrayMatching': {
+          const rows = rand(3, 5);
+          const cols = rand(3, 6);
+          const emoji = ['🍎', '🧙‍♂️', '⚡', '⭐', '🧹', '🪙', '💎'][rand(0, 6)];
+          const correctExpr = `${rows} × ${cols}`;
+          const options = [correctExpr, `${rows} + ${cols}`, `${rows + 1} × ${cols - 1}`, `${rows} × ${cols + 1}`].sort(() => 0.5 - Math.random());
+          return { type: 'ArrayMatching', rows: rows, cols: cols, emoji: emoji, ans: correctExpr, options: options };
+        }
+        case 'NumberLine': {
+          const isAddition = Math.random() > 0.5;
+          let num1, num2, ans;
+          if (isAddition) {
+            num1 = rand(5, 12); num2 = rand(3, 8); ans = num1 + num2;
+          } else {
+            num1 = rand(15, 24); num2 = rand(3, 10); ans = num1 - num2;
+          }
+          return { type: 'NumberLine', isAddition: isAddition, num1: num1, num2: num2, ans: ans, start: num1, min: 0, max: 25 };
+        }
+        case 'MathStories': {
+          const name = appState.profile.name || 'Harry';
+          const stories = [
+            {
+              text: `${name} has 4 boxes. Each box holds 8 markers. She gives 5 markers to Duo. How many markers does she have left?`,
+              steps: [
+                { q: `Step 1: How many markers are there in total? (4 × 8)`, op: '4 × 8', ans: 32 },
+                { q: `Step 2: How many are left after giving 5 to Duo? (32 - 5)`, op: '32 - 5', ans: 27 }
+              ]
+            },
+            {
+              text: `${name} finds 5 magic bags. Each bag has 6 chocolate frogs. A goblin steals 7 frogs. How many frogs are left?`,
+              steps: [
+                { q: `Step 1: How many frogs are in the bags? (5 × 6)`, op: '5 × 6', ans: 30 },
+                { q: `Step 2: How many are left after the goblin steals 7? (30 - 7)`, op: '30 - 7', ans: 23 }
+              ]
+            },
+            {
+              text: `Hermione buys 3 packages of spell ingredients. Each package has 9 owl feathers. She uses 10 feathers in a potion. How many are left?`,
+              steps: [
+                { q: `Step 1: How many feathers did she buy? (3 × 9)`, op: '3 × 9', ans: 27 },
+                { q: `Step 2: How many are left after using 10? (27 - 10)`, op: '27 - 10', ans: 17 }
+              ]
+            }
+          ];
+          const chosen = stories[Math.floor(Math.random() * stories.length)];
+          return { type: 'MathStories', text: chosen.text, steps: chosen.steps, currentStep: 0 };
+        }
+      }
+    };
+
+    const startQuestMathSprint = () => {
+      document.getElementById('quest-phase-badge').textContent = `Phase 2: Math Sprint`;
+      document.getElementById('quest-spelling-phase').style.display = 'none';
+      document.getElementById('quest-math-phase').style.display = 'block';
+      loadQuestMathQuestion();
+    };
+
     const loadQuestMathQuestion = () => {
       const idx = currentQuestState.mathIndex;
-      const data = currentQuestState.mathQuestions[idx];
+      let count = 5;
+      if (currentQuestState.isBossBattle) {
+        count = 10;
+        document.getElementById('quest-math-counter').textContent = `${idx + 1}/10`;
+      } else {
+        document.getElementById('quest-math-counter').textContent = `${idx + 1}/5`;
+      }
       
-      document.getElementById('quest-math-counter').textContent = `${idx + 1}/5`;
+      const q = currentQuestState.mathQuestions[idx];
+      const playground = document.getElementById('quest-math-playground');
+      playground.innerHTML = '';
+      const instr = document.getElementById('quest-math-instruction');
       
-      const box = document.getElementById('quest-math-problem-box');
-      box.innerHTML = `
-        <span>${data.num1}</span>
-        <span style="color: var(--gold)">×</span>
-        <span>${data.num2}</span>
-        <span style="color: var(--gold)">=</span>
-        <span style="color: var(--gold); border-bottom: 4px solid var(--gold); width: 60px; min-height: 70px; display: inline-block;"></span>
-      `;
-
-      const input = document.getElementById('quest-math-typed-answer');
-      input.value = '';
-      input.disabled = false;
-      input.className = 'name-input';
-      input.focus();
-
-      input.onkeydown = (e) => {
-        if (e.key === 'Enter') {
-          submitQuestMathAnswer();
-        }
-      };
-
       clearInterval(currentQuestState.mathTimerInterval);
-      currentQuestState.mathTimer = 15;
+      currentQuestState.mathTimer = currentQuestState.isBossBattle ? 10 : 20;
       currentQuestState.mathStartTime = Date.now();
       
       const timerFill = document.getElementById('quest-math-timer-fill');
       timerFill.style.width = '100%';
 
       currentQuestState.mathTimerInterval = setInterval(() => {
+        const totalTime = currentQuestState.isBossBattle ? 10 : 20;
         currentQuestState.mathTimer -= 0.1;
-        const pct = (currentQuestState.mathTimer / 15) * 100;
+        const pct = (currentQuestState.mathTimer / totalTime) * 100;
         timerFill.style.width = `${pct}%`;
 
         if (currentQuestState.mathTimer <= 0) {
           clearInterval(currentQuestState.mathTimerInterval);
           playAudioSynth('wrong');
-          revealQuestMathTimeoutAndNext();
+          if (currentQuestState.isBossBattle) {
+            submitBossAnswerTimeout();
+          } else {
+            handleMiniGameAnswer(false);
+          }
         }
       }, 100);
+
+      renderMiniGame(q, playground, instr);
     };
 
-    const submitQuestMathAnswer = () => {
-      clearInterval(currentQuestState.mathTimerInterval);
+    // INTERACTIVE MULTI-GAME ACTION HANDLERS
+    const selectFactor = (element, val) => {
       const idx = currentQuestState.mathIndex;
-      const data = currentQuestState.mathQuestions[idx];
-      const correctAns = data.ans;
-      const duration = (Date.now() - currentQuestState.mathStartTime) / 1000;
+      const q = currentQuestState.mathQuestions[idx];
+      if (element.classList.contains('selected')) {
+        element.classList.remove('selected');
+        q.selectedFactors = q.selectedFactors.filter(v => v !== val);
+      } else {
+        if (q.selectedFactors.length < 2) {
+          element.classList.add('selected');
+          q.selectedFactors.push(val);
+          if (q.selectedFactors.length === 2) {
+            const f1 = q.selectedFactors[0], f2 = q.selectedFactors[1];
+            if (f1 * f2 === q.target) {
+              playAudioSynth('correct');
+              document.querySelectorAll('.factor-bubble.selected').forEach(el => {
+                el.style.background = 'rgba(16, 185, 129, 0.2)'; el.style.borderColor = 'var(--green-success)';
+              });
+              setTimeout(() => handleMiniGameAnswer(true), 800);
+            } else {
+              playAudioSynth('wrong');
+              document.querySelectorAll('.factor-bubble.selected').forEach(el => {
+                el.style.background = 'rgba(239, 68, 68, 0.2)'; el.style.borderColor = 'var(--red-fail)'; el.style.animation = 'shake 0.4s';
+              });
+              setTimeout(() => {
+                document.querySelectorAll('.factor-bubble').forEach(el => {
+                  el.classList.remove('selected'); el.style.background = 'rgba(30, 41, 59, 0.5)'; el.style.borderColor = 'rgba(255, 255, 255, 0.1)'; el.style.animation = 'none';
+                });
+                q.selectedFactors = [];
+              }, 800);
+            }
+          }
+        }
+      }
+    };
 
-      const input = document.getElementById('quest-math-typed-answer');
+    const selectPairCard = (cardIdx) => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const cardEl = document.getElementById(`pair-c-${cardIdx}`);
+      if (cardEl.classList.contains('matched') || cardEl.classList.contains('selected')) return;
+
+      if (q.selectedCardIdx === null) {
+        q.selectedCardIdx = cardIdx;
+        cardEl.classList.add('selected');
+      } else {
+        const prevIdx = q.selectedCardIdx;
+        const prevCard = q.cards[prevIdx];
+        const currentCard = q.cards[cardIdx];
+        cardEl.classList.add('selected');
+        if (prevCard.matchId === currentCard.matchId && prevCard.id !== currentCard.id) {
+          playAudioSynth('correct');
+          document.getElementById(`pair-c-${prevIdx}`).classList.add('matched');
+          document.getElementById(`pair-c-${cardIdx}`).classList.add('matched');
+          document.getElementById(`pair-c-${prevIdx}`).classList.remove('selected');
+          document.getElementById(`pair-c-${cardIdx}`).classList.remove('selected');
+          q.selectedCardIdx = null; q.matchedPairsCount++;
+          if (q.matchedPairsCount === 3) { setTimeout(() => handleMiniGameAnswer(true), 800); }
+        } else {
+          playAudioSynth('wrong');
+          const el1 = document.getElementById(`pair-c-${prevIdx}`), el2 = document.getElementById(`pair-c-${cardIdx}`);
+          el1.style.borderColor = 'var(--red-fail)'; el2.style.borderColor = 'var(--red-fail)';
+          el1.style.animation = 'shake 0.4s'; el2.style.animation = 'shake 0.4s';
+          setTimeout(() => {
+            el1.classList.remove('selected'); el2.classList.remove('selected');
+            el1.style.borderColor = 'rgba(255, 255, 255, 0.1)'; el2.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            el1.style.animation = 'none'; el2.style.animation = 'none';
+            q.selectedCardIdx = null;
+          }, 800);
+        }
+      }
+    };
+
+    const clickPopBubble = (bubbleIdx) => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const bubble = q.bubbles[bubbleIdx];
+      const bubbleEl = document.getElementById(`pop-b-${bubbleIdx}`);
+      if (bubble.correct) {
+        playAudioSynth('correct');
+        bubbleEl.classList.add('popped');
+        q.correctCount++;
+        if (q.correctCount === q.neededToWin) { setTimeout(() => handleMiniGameAnswer(true), 600); }
+      } else {
+        playAudioSynth('wrong');
+        bubbleEl.style.background = 'radial-gradient(circle at 30% 30%, #ef4444 0%, #991b1b 100%)'; bubbleEl.style.animation = 'shake 0.4s';
+        setTimeout(() => {
+          bubbleEl.style.background = 'radial-gradient(circle at 30% 30%, #3b82f6 0%, #1d4ed8 100%)'; bubbleEl.style.animation = 'none';
+        }, 800);
+      }
+    };
+
+    const selectOperator = (op) => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const slot = document.getElementById('missing-operator-slot');
+      slot.textContent = op; slot.style.borderBottomColor = 'transparent';
+      document.querySelectorAll('.operator-btn').forEach(btn => btn.disabled = true);
+      if (op === q.correctOp) {
+        slot.style.color = 'var(--green-success)'; playAudioSynth('correct');
+        setTimeout(() => handleMiniGameAnswer(true), 1200);
+      } else {
+        slot.style.color = 'var(--red-fail)'; playAudioSynth('wrong'); slot.style.animation = 'shake 0.4s';
+        setTimeout(() => { slot.textContent = q.correctOp; slot.style.color = 'var(--green-success)'; }, 600);
+        setTimeout(() => handleMiniGameAnswer(false), 2000);
+      }
+    };
+
+    const submitPyramidAnswer = () => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const input = document.getElementById('pyramid-typed-answer');
       const val = parseInt(input.value.trim());
       input.disabled = true;
+      if (val === q.ans) {
+        input.className = 'name-input math-input-correct'; playAudioSynth('correct');
+        setTimeout(() => handleMiniGameAnswer(true), 1200);
+      } else {
+        input.className = 'name-input math-input-wrong'; playAudioSynth('wrong'); input.value = q.ans;
+        setTimeout(() => handleMiniGameAnswer(false), 2000);
+      }
+    };
+
+    const clickUnscrambleTile = (tileIdx, val) => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const tileEl = document.getElementById(`unscramble-t-${tileIdx}`);
+      if (tileEl.classList.contains('used')) return;
+      tileEl.classList.add('used');
+      q.userSequence.push(val);
+      const tray = document.getElementById('unscramble-tray-container');
+      const tile = document.createElement('div');
+      tile.className = 'tray-tile'; tile.textContent = val;
+      tray.appendChild(tile);
+      if (q.userSequence.length === q.sequence.length) {
+        let correct = true;
+        for (let i = 0; i < q.sequence.length; i++) {
+          if (q.userSequence[i] !== q.sequence[i]) { correct = false; break; }
+        }
+        if (correct) {
+          playAudioSynth('correct');
+          document.querySelectorAll('.tray-tile').forEach(el => {
+            el.style.background = 'rgba(16, 185, 129, 0.15)'; el.style.borderColor = 'var(--green-success)'; el.style.color = 'var(--green-success)';
+          });
+          setTimeout(() => handleMiniGameAnswer(true), 1200);
+        } else {
+          playAudioSynth('wrong');
+          document.querySelectorAll('.tray-tile').forEach(el => {
+            el.style.background = 'rgba(239, 68, 68, 0.15)'; el.style.borderColor = 'var(--red-fail)'; el.style.color = 'var(--red-fail)'; el.style.animation = 'shake 0.4s';
+          });
+          setTimeout(() => resetUnscramble(), 1200);
+        }
+      }
+    };
+
+    const selectArrayExpression = (element, opt) => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      document.querySelectorAll('.math-opt-btn').forEach(btn => btn.disabled = true);
+      if (opt === q.ans) {
+        element.classList.add('correct'); playAudioSynth('correct');
+        setTimeout(() => handleMiniGameAnswer(true), 1200);
+      } else {
+        element.classList.add('wrong'); playAudioSynth('wrong');
+        document.querySelectorAll('.math-opt-btn').forEach(btn => { if (btn.textContent === q.ans) btn.classList.add('correct'); });
+        setTimeout(() => handleMiniGameAnswer(false), 2000);
+      }
+    };
+
+    const updateNumberLineCharacter = (val) => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      document.getElementById('number-line-val-display').textContent = val;
+      const range = q.max - q.min;
+      const pct = ((val - q.min) / range) * 100;
+      const charNode = document.getElementById('line-character-node');
+      if (charNode) charNode.style.left = `calc(${pct}% - 2px)`;
+    };
+
+    const submitNumberLineValue = () => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const slider = document.getElementById('number-line-slider');
+      const val = parseInt(slider.value);
+      slider.disabled = true;
+      const charNode = document.getElementById('line-character-node');
+      if (val === q.ans) {
+        charNode.textContent = '🎉'; playAudioSynth('correct');
+        setTimeout(() => handleMiniGameAnswer(true), 1200);
+      } else {
+        charNode.textContent = '💥'; playAudioSynth('wrong'); slider.value = q.ans; updateNumberLineCharacter(q.ans);
+        setTimeout(() => handleMiniGameAnswer(false), 2000);
+      }
+    };
+
+    const submitStoryAnswer = () => {
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const step = q.steps[q.currentStep];
+      const input = document.getElementById('story-typed-answer');
+      const val = parseInt(input.value.trim());
+      input.disabled = true;
+      if (val === step.ans) {
+        input.className = 'name-input math-input-correct'; playAudioSynth('correct');
+        setTimeout(() => {
+          q.currentStep++;
+          if (q.currentStep < q.steps.length) {
+            renderMiniGame(q, document.getElementById('quest-math-playground'), document.getElementById('quest-math-instruction'));
+          } else {
+            handleMiniGameAnswer(true);
+          }
+        }, 1200);
+      } else {
+        input.className = 'name-input math-input-wrong'; playAudioSynth('wrong'); input.value = step.ans;
+        setTimeout(() => handleMiniGameAnswer(false), 2000);
+      }
+    };
+
+    // BOSS BATTLE DYNAMIC DUAL STREAKS HANDLERS
+    const submitBossAnswer = () => {
+      clearInterval(currentQuestState.mathTimerInterval);
+      const idx = currentQuestState.mathIndex;
+      const q = currentQuestState.mathQuestions[idx];
+      const correctAns = q.ans;
+      const input = document.getElementById('boss-typed-answer');
+      const val = parseInt(input.value.trim());
+      input.disabled = true;
+
+      const duration = (Date.now() - currentQuestState.mathStartTime) / 1000;
 
       if (val === correctAns) {
         input.className = 'name-input math-input-correct';
         playAudioSynth('correct');
+        const damage = 10 * q.multiplier;
+        q.bossHP = Math.max(0, q.bossHP - damage);
+        q.multiplier = Math.min(5, q.multiplier + 1);
         currentQuestState.mathScores.push({ correct: true, speed: duration });
       } else {
         input.className = 'name-input math-input-wrong';
         playAudioSynth('wrong');
-        currentQuestState.mathScores.push({ correct: false, speed: duration });
         input.value = correctAns;
+        q.multiplier = 1;
+        currentQuestState.mathScores.push({ correct: false, speed: duration });
       }
+
+      document.getElementById('boss-hp-fill-bar').style.width = `${q.bossHP}%`;
+      document.getElementById('boss-hp-label').textContent = `${q.bossHP}%`;
 
       setTimeout(() => {
         currentQuestState.mathIndex++;
-        if (currentQuestState.mathIndex < 5) {
+        if (q.bossHP <= 0) {
+          playAudioSynth('success');
+          triggerConfetti();
+          alert(`🏆 BOSS DEFEATED! You won the epic duel!`);
+          finishQuest();
+        } else if (currentQuestState.mathIndex < 10) {
+          const nextQ = currentQuestState.mathQuestions[currentQuestState.mathIndex];
+          nextQ.bossHP = q.bossHP;
+          nextQ.multiplier = q.multiplier;
           loadQuestMathQuestion();
         } else {
           finishQuest();
@@ -2900,33 +3614,51 @@
       }, 1500);
     };
 
-    const revealQuestMathTimeoutAndNext = () => {
+    const submitBossAnswerTimeout = () => {
       const idx = currentQuestState.mathIndex;
-      const data = currentQuestState.mathQuestions[idx];
-      currentQuestState.mathScores.push({ correct: false, speed: 15 });
-
-      const input = document.getElementById('quest-math-typed-answer');
+      const q = currentQuestState.mathQuestions[idx];
+      const input = document.getElementById('boss-typed-answer');
       input.disabled = true;
       input.className = 'name-input math-input-wrong';
-      input.value = data.ans;
+      input.value = q.ans;
+      q.multiplier = 1;
+      currentQuestState.mathScores.push({ correct: false, speed: 10 });
 
       setTimeout(() => {
         currentQuestState.mathIndex++;
-        if (currentQuestState.mathIndex < 5) {
+        if (currentQuestState.mathIndex < 10) {
+          const nextQ = currentQuestState.mathQuestions[currentQuestState.mathIndex];
+          nextQ.bossHP = q.bossHP;
+          nextQ.multiplier = q.multiplier;
           loadQuestMathQuestion();
         } else {
           finishQuest();
         }
       }, 1500);
+    };
+
+    const handleMiniGameAnswer = (isCorrect) => {
+      clearInterval(currentQuestState.mathTimerInterval);
+      const idx = currentQuestState.mathIndex;
+      const duration = (Date.now() - currentQuestState.mathStartTime) / 1000;
+      currentQuestState.mathScores.push({ correct: isCorrect, speed: duration });
+
+      currentQuestState.mathIndex++;
+      if (currentQuestState.mathIndex < 5) {
+        loadQuestMathQuestion();
+      } else {
+        finishQuest();
+      }
     };
 
     const finishQuest = () => {
       clearInterval(currentQuestState.mathTimerInterval);
       const scores = currentQuestState.mathScores;
       const totalCorrect = scores.filter(s => s.correct).length;
-      const avgSpeed = scores.reduce((sum, s) => sum + s.speed, 0) / 5;
+      const qCount = scores.length || 5;
+      const avgSpeed = scores.reduce((sum, s) => sum + s.speed, 0) / qCount;
 
-      const mathAccuracy = Math.round((totalCorrect / 5) * 100);
+      const mathAccuracy = Math.round((totalCorrect / qCount) * 100);
       const mathAvgSpeed = avgSpeed.toFixed(1);
 
       const gemReward = 20;
