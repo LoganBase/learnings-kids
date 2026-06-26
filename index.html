@@ -1434,10 +1434,13 @@
       background: rgba(30, 41, 59, 0.8) !important;
     }
     .spell-item-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
       background: rgba(30, 41, 59, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       cursor: pointer;
       transition: all 0.2s ease-out;
     }
@@ -1581,24 +1584,39 @@
           <h3 style="font-family: var(--font-display); color: var(--gold); font-size: 1.3rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🔢 Arithmancy Spells</h3>
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <div class="spell-item-card" onclick="startPracticeSession('FactorFactory')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Numerus Multiplicatus 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Factor Factory: Build the target product!</div>
+              <img src="/factor_factory.jpg" alt="Factor Factory" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Numerus Multiplicatus 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Factor Factory: Build the target product!</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('MathPairs')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Equatio Conjunctio 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Math Pairs: Match formula bricks to their values.</div>
+              <img src="/math_pairs.jpg" alt="Math Pairs" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Equatio Conjunctio 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Math Pairs: Match formula bricks to their values.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('GridPop')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Multiplus Explosio 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Grid Pop: Blast all bubbles showing multiples.</div>
+              <img src="/grid_pop.jpg" alt="Grid Pop" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Multiplus Explosio 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Grid Pop: Blast all bubbles showing multiples.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('MissingOperator')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Operator Revelio 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Operator Revelio: Find the hidden sign in equations.</div>
+              <img src="/operator_revelio.jpg" alt="Operator Revelio" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Operator Revelio 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Operator Revelio: Find the hidden sign in equations.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('NumberPyramid')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Pyramis Stackus 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Pyramid Stackus: Complete the magic pyramid wall.</div>
+              <img src="/pyramid_stackus.jpg" alt="Pyramid Stackus" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Pyramis Stackus 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Pyramid Stackus: Complete the magic pyramid wall.</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1608,24 +1626,39 @@
           <h3 style="font-family: var(--font-display); color: var(--gold); font-size: 1.3rem; border-bottom: 1px solid rgba(251, 191, 36, 0.3); padding-bottom: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🔤 Grammatica Charms</h3>
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <div class="spell-item-card" onclick="startPracticeSession('ListenType')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Orthographia Charm 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Orthographia: Listen and spell the spoken words.</div>
+              <img src="/lumos.jpg" alt="Orthographia Charm" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Orthographia Charm 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Orthographia: Listen and spell the spoken words.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('WordBank')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Lexicon Vocabula 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Lexicon Vocabula: Unscramble the magic sentence structure.</div>
+              <img src="/wingardium.jpg" alt="Lexicon Vocabula" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Lexicon Vocabula 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Lexicon Vocabula: Unscramble the magic sentence structure.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('TapPairs')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Glyphmatch Hex 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Glyphmatch: Link words with their corresponding emojis.</div>
+              <img src="/alohomora.jpg" alt="Glyphmatch Hex" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Glyphmatch Hex 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Glyphmatch: Link words with their corresponding emojis.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('ReadAloud')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Phonica Pronuncio 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Phonica Pronuncio: Read aloud and check pronunciation.</div>
+              <img src="/patronus.jpg" alt="Phonica Pronuncio" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Phonica Pronuncio 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Phonica Pronuncio: Read aloud and check pronunciation.</div>
+              </div>
             </div>
             <div class="spell-item-card" onclick="startPracticeSession('FillBlanks')">
-              <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Sententia Completio 🪄</div>
-              <div style="font-size: 0.85rem; color: var(--text-muted);">Sententia Completio: Select missing words to fill blanks.</div>
+              <img src="/expelliarmus.jpg" alt="Sententia Completio" style="width: 50px; height: 50px; border-radius: 8px; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; box-shadow: 0 0 8px rgba(251, 191, 36, 0.15);">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-light); font-size: 1.05rem;">Sententia Completio 🪄</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Sententia Completio: Select missing words to fill blanks.</div>
+              </div>
             </div>
           </div>
         </div>
