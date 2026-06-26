@@ -3882,11 +3882,10 @@
       }
 
       if (currentQuestState.isListening) {
-        currentQuestState.isListening = false;
-        trigger.classList.remove('listening');
-        wave.classList.remove('active');
         info.textContent = 'Processing speech...';
-        if (currentQuestState.recognition) currentQuestState.recognition.stop();
+        if (currentQuestState.recognition) {
+          currentQuestState.recognition.stop();
+        }
       } else {
         currentQuestState.isListening = true;
         trigger.classList.add('listening');
