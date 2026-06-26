@@ -3382,7 +3382,7 @@
           playground.innerHTML = `
             <div class="speech-box" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div id="quest-paragraph-container" class="reading-paragraph" style="margin-bottom: 16px;">
-                \${q.words.map((word, idx) => `<span class="reading-word" id="q-read-w-\${idx}">\${word}</span>`).join(' ')}
+                ${q.words.map((word, idx) => `<span class="reading-word" id="q-read-w-${idx}">${word}</span>`).join(' ')}
               </div>
               <div class="mic-indicator-wrapper" style="display: flex; flex-direction: column; align-items: center;">
                 <button id="quest-mic-trigger" class="mic-button" onclick="toggleQuestSpeechListening()">
@@ -3411,8 +3411,8 @@
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="unscramble-tray" id="spelling-wordbank-tray" style="min-height: 50px; width: 100%; max-width: 440px;"></div>
               <div class="unscramble-pool" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 16px;">
-                \${q.pool.map((word, idx) => `
-                  <div class="unscramble-tile" onclick="tapSpellingWordBankTile(this, '\${word.replace(/'/g, "\\\\'")}', \${idx})">\${word}</div>
+                ${q.pool.map((word, idx) => `
+                  <div class="unscramble-tile" onclick="tapSpellingWordBankTile(this, '${word.replace(/'/g, "\\\\'")}', ${idx})">${word}</div>
                 `).join('')}
               </div>
             </div>
@@ -3424,11 +3424,11 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <p style="font-size: 1.25rem; font-family: var(--font-display); line-height: 1.6; margin-bottom: 20px; text-align: center;">
-                \${q.sentenceWithBlank}
+                ${q.sentenceWithBlank}
               </p>
               <div style="display: flex; flex-wrap: wrap; justify-content: center; max-width: 440px;">
-                \${q.options.map(opt => `
-                  <button class="math-opt-btn btn-glow" style="margin: 8px; padding: 12px 24px; font-size: 1.1rem;" onclick="submitSpellingFillBlank(this, '\${opt.replace(/'/g, "\\\\'")}')">\${opt}</button>
+                ${q.options.map(opt => `
+                  <button class="math-opt-btn btn-glow" style="margin: 8px; padding: 12px 24px; font-size: 1.1rem;" onclick="submitSpellingFillBlank(this, '${opt.replace(/'/g, "\\\\'")}')">${opt}</button>
                 `).join('')}
               </div>
             </div>
@@ -3440,11 +3440,11 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <p style="font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; color: var(--gold); text-align: center; line-height: 1.4;">
-                \${q.prompt}
+                ${q.prompt}
               </p>
               <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                \${q.options.map(opt => `
-                  <button class="math-opt-btn btn-glow" style="margin: 6px; padding: 12px 20px; width: 100%; max-width: 440px; text-align: left; font-size: 0.95rem; line-height: 1.4;" onclick="submitSpellingCompleteThought(this, '\${opt.replace(/'/g, "\\\\'")}')">\${opt}</button>
+                ${q.options.map(opt => `
+                  <button class="math-opt-btn btn-glow" style="margin: 6px; padding: 12px 20px; width: 100%; max-width: 440px; text-align: left; font-size: 0.95rem; line-height: 1.4;" onclick="submitSpellingCompleteThought(this, '${opt.replace(/'/g, "\\\\'")}')">${opt}</button>
                 `).join('')}
               </div>
             </div>
@@ -3455,7 +3455,7 @@
           instr.textContent = "Listen and Type: Tap the speaker, then type what you hear!";
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-              <button class="mic-button" style="margin-bottom: 20px; background: rgba(59, 130, 246, 0.2); width: 72px; height: 72px; font-size: 2rem; border-color: #3b82f6;" onclick="speakWord('\${q.word.replace(/'/g, "\\\\'")}')">
+              <button class="mic-button" style="margin-bottom: 20px; background: rgba(59, 130, 246, 0.2); width: 72px; height: 72px; font-size: 2rem; border-color: #3b82f6;" onclick="speakWord('${q.word.replace(/'/g, "\\\\'")}')">
                 🔊
               </button>
               <input type="text" id="spelling-listen-typed-input" class="name-input" placeholder="Type word here..." style="max-width: 280px; text-align: center; font-size: 1.2rem; font-weight: 700;" autocomplete="off" autofocus onkeydown="if(event.key==='Enter') submitSpellingListenType()">
@@ -3473,12 +3473,12 @@
           instr.textContent = "Audio Word Select: Listen to the speaker and tap the correct word!";
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-              <button class="mic-button" style="margin-bottom: 20px; background: rgba(59, 130, 246, 0.2); width: 72px; height: 72px; font-size: 2rem; border-color: #3b82f6;" onclick="speakWord('\${q.word.replace(/'/g, "\\\\'")}')">
+              <button class="mic-button" style="margin-bottom: 20px; background: rgba(59, 130, 246, 0.2); width: 72px; height: 72px; font-size: 2rem; border-color: #3b82f6;" onclick="speakWord('${q.word.replace(/'/g, "\\\\'")}')">
                 🔊
               </button>
               <div style="display: flex; flex-wrap: wrap; justify-content: center; max-width: 440px;">
-                \${q.options.map(opt => `
-                  <button class="math-opt-btn btn-glow" style="margin: 8px; padding: 12px 24px; font-size: 1.1rem;" onclick="submitSpellingAudioSelect(this, '\${opt.replace(/'/g, "\\\\'")}')">${opt}</button>
+                ${q.options.map(opt => `
+                  <button class="math-opt-btn btn-glow" style="margin: 8px; padding: 12px 24px; font-size: 1.1rem;" onclick="submitSpellingAudioSelect(this, '${opt.replace(/'/g, "\\\\'")}')">${opt}</button>
                 `).join('')}
               </div>
             </div>
@@ -3491,9 +3491,9 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="image-match-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 440px; margin-top: 12px;">
-                \${q.cards.map((card, idx) => `
-                  <div class="image-match-card" id="spelling-pair-c-\${idx}" onclick="selectSpellingPairCard(\${idx})" style="padding: 12px 6px; font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center; font-weight: 700;">
-                    \${card.text}
+                ${q.cards.map((card, idx) => `
+                  <div class="image-match-card" id="spelling-pair-c-${idx}" onclick="selectSpellingPairCard(${idx})" style="padding: 12px 6px; font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                    ${card.text}
                   </div>
                 `).join('')}
               </div>
@@ -3513,12 +3513,12 @@
               <div class="boss-header" style="display: flex; align-items: center; width: 100%; max-width: 440px; padding: 10px; background: rgba(220,38,38,0.15); border: 2px solid rgba(220,38,38,0.3); border-radius: 12px; margin-bottom: 16px;">
                 <span style="font-size: 2.2rem;">👹</span>
                 <div class="boss-hp-bar" style="flex: 1; height: 14px; background: rgba(0,0,0,0.4); border-radius: 7px; margin: 0 12px; overflow: hidden; position: relative;">
-                  <div class="boss-hp-fill" id="boss-hp-fill-bar" style="width: \${q.bossHP}%; height: 100%; background: linear-gradient(90deg, #ef4444, #b91c1c); transition: width 0.3s;"></div>
+                  <div class="boss-hp-fill" id="boss-hp-fill-bar" style="width: ${q.bossHP}%; height: 100%; background: linear-gradient(90deg, #ef4444, #b91c1c); transition: width 0.3s;"></div>
                 </div>
-                <span id="boss-hp-label" style="font-family: var(--font-display); font-weight: 700; color: #f87171;">\${q.bossHP}%</span>
+                <span id="boss-hp-label" style="font-family: var(--font-display); font-weight: 700; color: #f87171;">${q.bossHP}%</span>
               </div>
               <div class="math-problem-box" style="font-size: 2.2rem; font-family: var(--font-display); font-weight: 700; margin-bottom: 16px; text-shadow: 0 0 15px rgba(251, 191, 36, 0.4); color: var(--gold);">
-                \${q.num1} \${q.op} \${q.num2} = ?
+                ${q.num1} ${q.op} ${q.num2} = ?
               </div>
               <input type="number" id="boss-typed-answer" class="name-input" pattern="[0-9]*" inputmode="numeric" placeholder="?" style="max-width: 140px; text-align: center; font-size: 1.8rem; font-weight: 700;" autocomplete="off" autofocus onkeydown="if(event.key==='Enter') submitBossAnswer()">
               <button class="btn-glow btn-success" style="margin-top: 16px; padding: 8px 24px; font-size: 1rem;" onclick="submitBossAnswer()">Cast ⚡</button>
@@ -3531,14 +3531,14 @@
           break;
         }
         case 'FactorFactory': {
-          instr.textContent = `Factor Factory: Tap the factors that multiply to make \${q.target}!`;
+          instr.textContent = `Factor Factory: Tap the factors that multiply to make ${q.target}!`;
           q.selectedFactors = [];
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-              <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); margin-bottom: 16px; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);">\${q.target}</h2>
+              <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); margin-bottom: 16px; text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);">${q.target}</h2>
               <div class="factor-grid">
-                \${q.options.map(opt => `
-                  <div class="factor-bubble" onclick="selectFactor(this, \${opt})">\${opt}</div>
+                ${q.options.map(opt => `
+                  <div class="factor-bubble" onclick="selectFactor(this, ${opt})">${opt}</div>
                 `).join('')}
               </div>
             </div>
@@ -3552,8 +3552,8 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="pairs-grid">
-                \${q.cards.map((card, idx) => `
-                  <div class="pair-card" id="pair-c-\${idx}" onclick="selectPairCard(\${idx})">\${card.text}</div>
+                ${q.cards.map((card, idx) => `
+                  <div class="pair-card" id="pair-c-${idx}" onclick="selectPairCard(${idx})">${card.text}</div>
                 `).join('')}
               </div>
             </div>
@@ -3561,13 +3561,13 @@
           break;
         }
         case 'GridPop': {
-          instr.textContent = `Grid Pop: Pop all multiples of \${q.divisor}!`;
+          instr.textContent = `Grid Pop: Pop all multiples of ${q.divisor}!`;
           q.correctCount = 0;
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="grid-pop-container">
-                \${q.bubbles.map((bubble, idx) => `
-                  <div class="pop-bubble" id="pop-b-\${idx}" onclick="clickPopBubble(\${idx})">\${bubble.val}</div>
+                ${q.bubbles.map((bubble, idx) => `
+                  <div class="pop-bubble" id="pop-b-${idx}" onclick="clickPopBubble(${idx})">${bubble.val}</div>
                 `).join('')}
               </div>
             </div>
@@ -3579,41 +3579,41 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div style="font-size: 2.5rem; font-family: var(--font-display); font-weight: 700; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-light);">
-                <span>\${q.num1}</span>
+                <span>${q.num1}</span>
                 <span id="missing-operator-slot" style="border-bottom: 3px dashed rgba(255,255,255,0.3); min-width: 44px; text-align: center; color: var(--gold);">?</span>
-                <span>\${q.num2}</span>
+                <span>${q.num2}</span>
                 <span>=</span>
-                <span>\${q.ans}</span>
+                <span>${q.ans}</span>
               </div>
               <div class="operator-dock">
                 <button class="operator-btn" onclick="selectOperator('+')">+</button>
                 <button class="operator-btn" onclick="selectOperator('-')">-</button>
                 <button class="operator-btn" onclick="selectOperator('×')">×</button>
-                \${q.correctOp === '÷' || Math.random() > 0.5 ? `<button class="operator-btn" onclick="selectOperator('÷')">÷</button>` : ''}
+                ${q.correctOp === '÷' || Math.random() > 0.5 ? `<button class="operator-btn" onclick="selectOperator('÷')">÷</button>` : ''}
               </div>
             </div>
           `;
           break;
         }
         case 'NumberPyramid': {
-          instr.textContent = `Number Pyramid: Complete the wall! Rule: Bottom bricks \${q.op} together.`;
+          instr.textContent = `Number Pyramid: Complete the wall! Rule: Bottom bricks ${q.op} together.`;
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="pyramid-container" style="margin-bottom: 20px;">
                 <div class="pyramid-row">
-                  <div class="pyramid-brick top-brick \${q.missingIdx === 0 ? 'active-brick' : ''}" style="display: flex; flex-direction: column; line-height: 1;">
+                  <div class="pyramid-brick top-brick ${q.missingIdx === 0 ? 'active-brick' : ''}" style="display: flex; flex-direction: column; line-height: 1;">
                     <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--gold); margin-bottom: 2px;">TOP</span>
-                    <span>\${q.missingIdx === 0 ? '?' : q.top}</span>
+                    <span>${q.missingIdx === 0 ? '?' : q.top}</span>
                   </div>
                 </div>
                 <div class="pyramid-row">
                   <div class="pyramid-brick" style="display: flex; flex-direction: column; line-height: 1;">
                     <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px;">LEFT</span>
-                    <span>\${q.missingIdx === 1 ? '?' : q.left}</span>
+                    <span>${q.missingIdx === 1 ? '?' : q.left}</span>
                   </div>
                   <div class="pyramid-brick" style="display: flex; flex-direction: column; line-height: 1;">
                     <span style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px;">RIGHT</span>
-                    <span>\${q.missingIdx === 2 ? '?' : q.right}</span>
+                    <span>${q.missingIdx === 2 ? '?' : q.right}</span>
                   </div>
                 </div>
               </div>
@@ -3636,8 +3636,8 @@
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="unscramble-tray" id="unscramble-tray-container" style="min-height: 54px; width: 100%; max-width: 400px; display: flex; justify-content: center; align-items: center; border-bottom: 2px dashed rgba(255,255,255,0.2);"></div>
               <div class="unscramble-pool">
-                \${q.pool.map((val, idx) => `
-                  <div class="unscramble-tile" id="unscramble-t-\${idx}" onclick="clickUnscrambleTile(\${idx}, '\${val}')">\${val}</div>
+                ${q.pool.map((val, idx) => `
+                  <div class="unscramble-tile" id="unscramble-t-${idx}" onclick="clickUnscrambleTile(${idx}, '${val}')">${val}</div>
                 `).join('')}
               </div>
             </div>
@@ -3649,17 +3649,17 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <div class="array-matching-box">
-                \${Array.from({ length: q.rows }).map(() => `
+                ${Array.from({ length: q.rows }).map(() => `
                   <div class="visual-array-row">
-                    \${Array.from({ length: q.cols }).map(() => `
-                      <span class="array-item-emoji">\${q.emoji}</span>
+                    ${Array.from({ length: q.cols }).map(() => `
+                      <span class="array-item-emoji">${q.emoji}</span>
                     `).join('')}
                   </div>
                 `).join('')}
               </div>
               <div style="display: flex; flex-wrap: wrap; justify-content: center; max-width: 440px;">
-                \${q.options.map(opt => `
-                  <button class="math-opt-btn btn-glow" style="margin: 6px; padding: 10px 20px; font-size: 1.1rem; font-weight: 700;" onclick="selectArrayExpression(this, '\${opt}')">${opt}</button>
+                ${q.options.map(opt => `
+                  <button class="math-opt-btn btn-glow" style="margin: 6px; padding: 10px 20px; font-size: 1.1rem; font-weight: 700;" onclick="selectArrayExpression(this, '${opt}')">${opt}</button>
                 `).join('')}
               </div>
             </div>
@@ -3671,7 +3671,7 @@
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center; padding: 0 10px;">
               <div style="font-size: 1.4rem; font-family: var(--font-display); font-weight: 700; color: var(--gold); margin-bottom: 12px;">
-                Start at \${q.num1}, \${q.isAddition ? `Add (+)` : `Subtract (-)`} \${q.num2}
+                Start at ${q.num1}, ${q.isAddition ? `Add (+)` : `Subtract (-)`} ${q.num2}
               </div>
               <div class="number-line-container">
                 <div class="number-line-character" id="line-character-node">🧙‍♂️</div>
@@ -3684,9 +3684,9 @@
                   <div class="number-line-tick" data-val="25"></div>
                 </div>
               </div>
-              <input type="range" id="number-line-slider" min="\${q.min}" max="\${q.max}" value="\${q.start}" style="width:100%; max-width: 400px; margin-top: 24px; cursor: pointer;" oninput="updateNumberLineCharacter(parseInt(this.value))">
+              <input type="range" id="number-line-slider" min="${q.min}" max="${q.max}" value="${q.start}" style="width:100%; max-width: 400px; margin-top: 24px; cursor: pointer;" oninput="updateNumberLineCharacter(parseInt(this.value))">
               <div style="font-size: 1.6rem; font-weight: 700; color: var(--gold); margin: 8px 0 14px;">
-                Value: <span id="number-line-val-display">\${q.start}</span>
+                Value: <span id="number-line-val-display">${q.start}</span>
               </div>
               <button class="btn-glow btn-success" style="padding: 8px 24px; font-size: 1rem;" onclick="submitNumberLineValue()">Cast ⚡</button>
             </div>
@@ -3696,14 +3696,14 @@
         }
         case 'MathStories': {
           const step = q.steps[q.currentStep];
-          instr.textContent = `Math Story: Solve Step \${q.currentStep + 1}!`;
+          instr.textContent = `Math Story: Solve Step ${q.currentStep + 1}!`;
           playground.innerHTML = `
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
               <p class="story-text" style="font-size: 1.15rem; line-height: 1.5; margin-bottom: 16px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); text-align: center; max-width: 440px;">
-                \${q.text}
+                ${q.text}
               </p>
               <div style="font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-bottom: 12px; text-align: center;">
-                \${step.q}
+                ${step.q}
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <input type="number" id="story-typed-answer" class="name-input" pattern="[0-9]*" inputmode="numeric" placeholder="Answer" style="max-width: 140px; text-align: center; font-size: 1.4rem; font-weight: 700;" autocomplete="off" autofocus onkeydown="if(event.key==='Enter') submitStoryAnswer()">
@@ -4090,12 +4090,7 @@
       }
     };
 
-    const startQuestMathSprint = () => {
-      document.getElementById('quest-phase-badge').textContent = `Phase 2: Math Sprint`;
-      document.getElementById('quest-spelling-phase').style.display = 'none';
-      document.getElementById('quest-math-phase').style.display = 'block';
-      loadQuestMathQuestion();
-    };
+
 
     const loadQuestMathQuestion = () => {
       const idx = currentQuestState.mathIndex;
